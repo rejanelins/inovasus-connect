@@ -115,39 +115,39 @@ def render_auth_page(key_prefix: str = "main"):
                     st.error(f"Erro ao fazer login: {e}")
 
     # --- TAB CADASTRO ---
-    with tab_signup:
-        with st.form(f"{key_prefix}_signup_form"):
-            name = st.text_input("Nome Completo*")
-            email = st.text_input("E-mail*")
-            password = st.text_input("Senha (mínimo 6 caracteres)*", type="password")
-            user_type = st.selectbox("Tipo de Perfil*", ["Profissional de Saúde / Squad", "Gestor de Saúde"])
-            ubs = st.text_input("Unidade / Secretaria de Saúde", placeholder="Ex: UBS Jardim das Acácias")
-            
-            submit_signup = st.form_submit_button("Cadastrar", type="primary", use_container_width=True)
-            
+    # --- TAB CADASTRO ---
+        with tab_signup:
+            with st.form(f"{key_prefix}_signup_form"):
+                name = st.text_input("Nome Completo*")
+                email = st.text_input("E-mail*")
+                password = st.text_input("Senha (mínimo 6 caracteres)*", type="password")
+                user_type = st.selectbox("Tipo de Perfil*", ["Profissional de Saúde", "Gestor de Saúde"])
+                ubs = st.text_input("Unidade / Secretaria de Saúde", placeholder="Ex: UBS Centro")
+
+                submit_signup = st.form_submit_button("Cadastrar", type="primary")
+
             if submit_signup:
-    if not name or not email or not password:
-        st.error("Preencha todos os campos obrigatórios (*).")
-    else:
-        try:
-            role_value = "gestor" if user_type == "Gestor de Saúde" else "profissional"
-            
-            # 1. Envia os dados do perfil junto na criacao da conta (User Metadata)
-            auth_res = supabase.auth.sign_up({
-                "email": email,
-                "password": password,
-                "options": {
-                    "data": {
-                        "name": name,
-                        "role": role_value,
-                        "ubs": ubs
-                    }
-                }
-            })
-            
-            st.success("✔ Conta criada com sucesso! Faça login.")
-        except Exception as e:
-            st.error(f"Erro ao criar conta: {e}")
+                if not name or not email or not password:
+                    st.error("Preencha todos os campos obrigatórios (*).")
+                else:
+                    try:
+                        role_value = "gestor" if user_type == "Gestor de Saúde" else "profissional"
+
+                        auth_res = supabase.auth.sign_up({
+                            "email": email,
+                            "password": password,
+                            "options": {
+                                "data": {
+                                    "name": name,
+                                    "role": role_value,
+                                    "ubs": ubs
+                                }
+                            }
+                        })
+
+                        st.success("✔ Conta criada com sucesso! Faça login.")
+                    except Exception as e:
+                        st.error(f"Erro ao criar conta: {e}")
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
