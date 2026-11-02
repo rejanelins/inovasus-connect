@@ -537,7 +537,7 @@ def page_challenges() -> None:
         """
         <div class="hero">
             <div class="brand-mark">Mural de Desafios</div>
-            <h1>Dores reais da ponta</h1>
+            <h1>Problemas Reais dos Serviços</h1>
             <p>Encontre um desafio de unidade, detalhe a dor e aceite com o seu squad.</p>
         </div>
         """,
