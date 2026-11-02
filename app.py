@@ -126,24 +126,28 @@ def render_auth_page(key_prefix: str = "main"):
             submit_signup = st.form_submit_button("Cadastrar", type="primary", use_container_width=True)
             
             if submit_signup:
-                if not name or not email or not password:
-                    st.error("Preencha todos os campos obrigatórios (*).")
-                else:
-                    try:
-                        auth_res = supabase.auth.sign_up({"email": email, "password": password})
-                        user_id = auth_res.user.id
-                        role_value = "gestor" if user_type == "Gestor de Saúde" else "usuario"
-                        
-                        profile_data = {
-                            "id": user_id,
-                            "name": name,
-                            "role": role_value,
-                            "ubs": ubs
-                        }
-                        supabase.table("profiles").insert(profile_data).execute()
-                        st.success("✅ Conta criada com sucesso! Faça login na aba 'Entrar'.")
-                    except Exception as e:
-                        st.error(f"Erro ao criar conta: {e}")
+    if not name or not email or not password:
+        st.error("Preencha todos os campos obrigatórios (*).")
+    else:
+        try:
+            role_value = "gestor" if user_type == "Gestor de Saúde" else "profissional"
+            
+            # 1. Envia os dados do perfil junto na criacao da conta (User Metadata)
+            auth_res = supabase.auth.sign_up({
+                "email": email,
+                "password": password,
+                "options": {
+                    "data": {
+                        "name": name,
+                        "role": role_value,
+                        "ubs": ubs
+                    }
+                }
+            })
+            
+            st.success("✔ Conta criada com sucesso! Faça login.")
+        except Exception as e:
+            st.error(f"Erro ao criar conta: {e}")
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
