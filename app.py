@@ -464,25 +464,36 @@ def init_state() -> None:
 
 def sidebar_nav() -> str:
     pages = [
-    "Dashboard Principal",
-    "Mural de Desafios",
-    "Radar de Talentos",
-    "Workspace da Trilha",
-    "Vitrine de Soluções",
-    "🏆 Ranking",  # <--- Adicionar esta linha
-]
+        "Dashboard Principal",
+        "Mural de Desafios",
+        "Radar de Talentos",
+        "Workspace da Trilha",
+        "Vitrine de Soluções",
+        "🏆 Ranking"
+    ]
+
+    # Garante que haja uma pagina padrao inicial
+    if "page" not in st.session_state:
+        st.session_state.page = "Mural de Desafios"
+
     with st.sidebar:
         st.markdown("### InovaSUS Connect")
         st.caption("Inovação aberta na ponta do SUS")
         st.markdown("---")
+        
         for item in pages:
             is_current = st.session_state.page == item
-            if st.button(item, key=f"nav_{item}", use_container_width=True, type="primary" if is_current else "secondary"):
+            btn_type = "primary" if is_current else "secondary"
+            
+            if st.button(item, key=f"nav_{item}", use_container_width=True, type=btn_type):
                 st.session_state.page = item
+                st.rerun()  # <--- Forca a atualização imediata da tela ao clicar
+
         st.markdown("---")
         st.markdown(f"**{USER_NAME}**")
         st.caption(USER_ROLE)
         st.caption("Rede APS · Pernambuco")
+
     return st.session_state.page
 
 
