@@ -899,41 +899,49 @@ def page_showcase() -> None:
 
 
 def main():
-    # Se NÃO estiver logado, exibe apenas a tela de Login/Cadastro em página cheia
+    # Se não estiver logado, exibe apenas a tela de login/cadastro
     if "user" not in st.session_state or st.session_state.user is None:
+        st.markdown("""
+            <style>
+                [data-testid="stSidebar"] { display: none !important; }
+            </style>
+        """, unsafe_allow_html=True)
         render_auth_page()
         return
 
-    # --- USUÁRIO LOGADO: Exibe a Barra Lateral Azul Original ---
+    # USUÁRIO LOGADO: Renderiza a barra lateral
     profile = st.session_state.get("profile", {})
     user_name = profile.get("name", "Usuário")
     user_role = "Gestor" if profile.get("role") == "gestor" else "Profissional de Saúde"
     user_ubs = profile.get("ubs", "N/A")
 
-    # Informações do Usuário no topo da Sidebar
-    st.sidebar.markdown(f"### 🩺 InovaSUS Connect")
+    st.sidebar.markdown("### 🏥 InovaSUS Connect")
     st.sidebar.markdown(f"**Bem-vindo(a), {user_name}!**")
     st.sidebar.caption(f"📌 {user_role} · {user_ubs}")
-    
     st.sidebar.markdown("---")
 
-    # Dicionário com TODAS as páginas originais da aplicação
+    # Dicionário com TODAS as páginas ativas da aplicação
     pages = {
-        "Mural de Desafios": page_challenges,
-        # Se você tiver outras funções de página, adicione aqui:
-        # "Radar de Talentos": page_talents,
-        # "Painel de Gestão": page_management,
+        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
+        "Dashboard Principal": page_dashboard if "page_dashboard" in globals() else lambda: st.info("Dashboard em desenvolvimento"),
+        "Radar de Talentos": page_talents if "page_talents" in globals() else lambda: st.info("Radar de Talentos em desenvolvimento"),
+        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento"),
+        "Vitrine de Soluções": page_management if "page_management" in globals() else lambda: st.info("Vitrine de Soluções em desenvolvimento"),
+        "🏆 Ranking": render_ranking_page
     }
 
-    # Navegação por Radio Button na Sidebar
-    page = st.sidebar.radio("Navegação", list(pages.keys()))
+    # Navegação na Sidebar
+    page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
 
     st.sidebar.markdown("---")
-  
 
-    # Executa a página selecionada
-    pages[page]()
+    # Botão de Logout nativo no rodapé da sidebar
+    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True, type="primary"):
+        logout()
 
+    # Executa a função da página selecionada
+    pages[page_selected]()
+    
 if __name__ == "__main__":
     main()
 
