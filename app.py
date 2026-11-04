@@ -505,9 +505,7 @@ def sidebar_nav() -> str:
         st.markdown("**Navegação**")
 
         pages = [
-            "Dashboard Principal",
             "Mural de Desafios",
-            "Radar de Talentos",
             "Workspace da Trilha",
             "Vitrine de Soluções",
             "🏆 Ranking"
