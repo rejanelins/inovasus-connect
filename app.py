@@ -551,8 +551,8 @@ def page_dashboard() -> None:
     st.subheader("Ações rápidas")
     a1, a2, a3, a4 = st.columns(4)
     if a1.button("Novo desafio", key="btn_dash_novo", use_container_width=True, type="primary"):
-        st.session_state["go_mural"] = True
-        st.toast("Abra o Mural de Desafios na barra lateral para publicar.")
+        st.session_state["nav_selection"] = "Mural de Desafios"
+        st.rerun()
     if a2.button("Montar squad", key="btn_dash_squad", use_container_width=True):
         st.toast("Use o Radar de Talentos para convidar colegas.")
     if a3.button("Abrir trilha", key="btn_dash_trilha", use_container_width=True):
@@ -1012,8 +1012,16 @@ def main():
         "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
     }
 
-   # Navegação na Sidebar
-    page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
+   # Inicializa o estado de navegação caso ainda não exista
+    if "nav_selection" not in st.session_state:
+        st.session_state["nav_selection"] = "Página Principal"
+
+    # Navegação na Sidebar ligada ao session_state
+    page_selected = st.sidebar.radio(
+        "Navegação", 
+        list(pages.keys()), 
+        key="nav_selection"
+    )
 
     # Executa a função da página selecionada
     if page_selected in pages:
