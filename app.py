@@ -1012,7 +1012,7 @@ def main():
         "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
     }
 
-    # Navegação na Sidebar
+   # Navegação na Sidebar
     page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
 
     # Executa a função da página selecionada
@@ -1020,11 +1020,9 @@ def main():
         pages[page_selected]()
 
     # Botão de Logout nativo no rodapé da sidebar
-    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True, type="primary"):
+    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True):
         logout()
 
-    # Executa a função da página selecionada
-    pages[page_selected]()
 
 if __name__ == "__main__":
     main()
