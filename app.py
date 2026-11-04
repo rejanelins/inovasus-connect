@@ -579,8 +579,8 @@ def page_dashboard() -> None:
             st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
 
 def page_challenges() -> None:
-# Exibe a ilustração centralizada com fundo branco forçado via CSS
-import base64
+    # Exibe a ilustração centralizada com fundo branco forçado via CSS
+    import base64
 
     try:
         with open("assets/hero_health.jpg", "rb") as image_file:
