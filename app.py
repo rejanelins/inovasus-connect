@@ -998,6 +998,7 @@ def main():
 
     # Dicionário seguro com as páginas ativas da aplicação
     pages = {
+        "Página Principal": page_dashboard if "page_dashboard" in globals() else (lambda: st.info("Página Principal em desenvolvimento.")),
         "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
         "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento."),
         "Vitrine de Soluções": page_solutions,
