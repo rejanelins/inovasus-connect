@@ -588,14 +588,14 @@ def page_challenges() -> None:
 
         _, col_center, _ = st.columns([1, 2, 1])
         with col_center:
-            st.markdown(
-                f"""
-                <div style="background-color: #ffffff; padding: 12px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px;">
-                    <img src="data:image/jpeg;base64,{encoded_string}" style="max-width: 260px; width: 100%; height: auto; border-radius: 8px;">
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+st.markdown(
+            f"""
+            <div style="background-color: #ffffff; padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 0 auto; max-width: 320px;">
+                <img src="data:image/jpeg;base64,{encoded_string}" style="max-width: 280px; width: 100%; height: auto; border-radius: 8px;">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     except Exception:
         pass
 
