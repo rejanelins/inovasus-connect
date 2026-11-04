@@ -579,15 +579,18 @@ def page_dashboard() -> None:
             st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
 
 def page_challenges() -> None:
-# Ajusta a largura da imagem para alinhar com o card
-    _, col_center, _ = st.columns([1, 8, 1])
+# Exibe a imagem centralizada e com tamanho compacto
+    _, col_center, _ = st.columns([1, 2, 1])
     with col_center:
-        st.image("assets/hero_health.jpg", use_container_width=True)    st.markdown(
+        st.image("assets/hero_health.jpg", width=280)
+
+    # Card azul "Problemas Reais dos Serviços" (fora da coluna)
+    st.markdown(
         """
         <div class="hero">
-         <div class="brand-mark">Mural de Desafios</div>
+            <div class="brand-mark">Mural de Desafios</div>
             <h1>Problemas Reais dos Serviços</h1>
-            <p>Encontre um desafio de unidade, veja detalhes do problema e aceite com o seu grupo.</p>
+            <p>Encontre um desafio de unidade, veja detalhes do problema e aceite com o seu squad.</p>
         </div>
         """,
         unsafe_allow_html=True,
