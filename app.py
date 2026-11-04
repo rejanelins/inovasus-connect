@@ -921,15 +921,16 @@ def main():
     st.sidebar.markdown("---")
 
     # Dicionário com TODAS as páginas ativas da aplicação
+# Dicionário seguro com TODAS as páginas da aplicação
     pages = {
-        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
+        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else (page_challenges if "page_challenges" in globals() else lambda: st.info("Mural de Desafios")),
         "Dashboard Principal": page_dashboard if "page_dashboard" in globals() else lambda: st.info("Dashboard em desenvolvimento"),
         "Radar de Talentos": page_talents if "page_talents" in globals() else lambda: st.info("Radar de Talentos em desenvolvimento"),
         "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento"),
         "Vitrine de Soluções": page_management if "page_management" in globals() else lambda: st.info("Vitrine de Soluções em desenvolvimento"),
-        "🏆 Ranking": render_ranking_page
+        "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else lambda: st.info("🏆 Ranking em desenvolvimento")
     }
-
+    
     # Navegação na Sidebar
     page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
 
@@ -941,7 +942,7 @@ def main():
 
     # Executa a função da página selecionada
     pages[page_selected]()
-    
+
 if __name__ == "__main__":
     main()
 
