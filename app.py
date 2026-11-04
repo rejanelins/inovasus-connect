@@ -996,9 +996,8 @@ def main():
     st.sidebar.caption(f"📌 {user_role} · {user_ubs}")
     st.sidebar.markdown("---")
 
-    # Dicionário com TODAS as páginas ativas da aplicação
-# Dicionário seguro com TODAS as páginas da aplicação
-   pages = {
+    # Dicionário seguro com as páginas ativas da aplicação
+    pages = {
         "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
         "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento."),
         "Vitrine de Soluções": page_solutions,
@@ -1008,7 +1007,9 @@ def main():
     # Navegação na Sidebar
     page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
 
-    st.sidebar.markdown("---")
+    # Executa a função da página selecionada
+    if page_selected in pages:
+        pages[page_selected]()
 
     # Botão de Logout nativo no rodapé da sidebar
     if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True, type="primary"):
