@@ -579,10 +579,15 @@ def page_dashboard() -> None:
             st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
 
 def page_challenges() -> None:
-# Exibe a imagem centralizada e com tamanho compacto
+# Garante fundo branco na ilustração
+    from PIL import Image
+    img = Image.open("assets/hero_health.jpg").convert("RGBA")
+    bg = Image.new("RGBA", img.size, (255, 255, 255))
+    img_white_bg = Image.alpha_composite(bg, img).convert("RGB")
+
     _, col_center, _ = st.columns([1, 2, 1])
     with col_center:
-        st.image("assets/hero_health.jpg", width=280)
+        st.image(img_white_bg, width=280)
 
     # Card azul "Problemas Reais dos Serviços" (fora da coluna)
     st.markdown(
