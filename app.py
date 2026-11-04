@@ -915,7 +915,64 @@ def page_showcase() -> None:
                         st.session_state.pilots = [*st.session_state.pilots, solution["title"]]
                     st.success(f"Solicitação de piloto enviada para {solution['title']}.")
             st.divider()
+# ---------------------------------------------------------
+# PÁGINA: VITRINE DE SOLUÇÕES
+# ---------------------------------------------------------
+def page_solutions() -> None:
+    st.markdown("## 💡 Vitrine de Soluções")
+    st.markdown("Explore as soluções e inovações aplicadas para transformar os serviços de saúde.")
 
+    solutions = [
+        {
+            "title": "Triagem Digital SUS",
+            "category": "Atendimento & Triagem",
+            "author": "Dr. Carlos Eduardo (SMS Mossoró)",
+            "impact": "Redução de 35% no tempo de espera",
+            "desc": "Sistema interativo para pré-classificação de risco antes do atendimento presencial nas UBSs.",
+            "status": "Em Produção"
+        },
+        {
+            "title": "Gestor de Estoque de Insumos",
+            "category": "Logística & Farmácia",
+            "author": "Maria Lúcia (Enfermeira)",
+            "impact": "Zera desperdício por validade em 6 meses",
+            "desc": "Painel de alertas para controle de validade e transferência de medicação entre unidades da rede.",
+            "status": "Piloto Ativo"
+        }
+    ]
+
+    categories = ["Todas"] + list(set(s["category"] for s in solutions))
+    selected_cat = st.selectbox("Filtrar por Categoria:", categories)
+
+    if selected_cat != "Todas":
+        filtered_solutions = [s for s in solutions if s["category"] == selected_cat]
+    else:
+        filtered_solutions = solutions
+
+    st.markdown("---")
+
+    cols = st.columns(2)
+    for index, sol in enumerate(filtered_solutions):
+        col_idx = index % 2
+        with cols[col_idx]:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="background-color: #ffffff; padding: 20px; border-radius: 12px; border-left: 5px solid #0d6efd; box-shadow: 0 4px 10px rgba(0,0,0,0.06); margin-bottom: 20px;">
+                        <span style="background-color: #e7f1ff; color: #0d6efd; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px;">{sol['category']}</span>
+                        <h3 style="margin-top: 10px; margin-bottom: 5px; color: #1e293b;">{sol['title']}</h3>
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">👤 <b>Responsável:</b> {sol['author']}</p>
+                        <p style="font-size: 14px; color: #334155;">{sol['desc']}</p>
+                        <div style="background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; margin-top: 10px;">
+                            <span style="font-size: 13px; color: #16a34a; font-weight: bold;">📈 Impacto: {sol['impact']}</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+                with st.expander("🔍 Ver detalhes da solução"):
+                    st.write(f"**Status atual:** {sol['status']}")
+                    st.button("Entrar em contato com o autor", key=f"btn_sol_{index}")
 
 def main():
     # Se não estiver logado, exibe apenas a tela de login/cadastro
@@ -941,13 +998,11 @@ def main():
 
     # Dicionário com TODAS as páginas ativas da aplicação
 # Dicionário seguro com TODAS as páginas da aplicação
-    pages = {
-        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else (page_challenges if "page_challenges" in globals() else lambda: st.info("Mural de Desafios")),
-        "Dashboard Principal": page_dashboard if "page_dashboard" in globals() else lambda: st.info("Dashboard em desenvolvimento"),
-        "Radar de Talentos": page_talents if "page_talents" in globals() else lambda: st.info("Radar de Talentos em desenvolvimento"),
-        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento"),
-        "Vitrine de Soluções": page_management if "page_management" in globals() else lambda: st.info("Vitrine de Soluções em desenvolvimento"),
-        "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else lambda: st.info("🏆 Ranking em desenvolvimento")
+   pages = {
+        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
+        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento."),
+        "Vitrine de Soluções": page_solutions,
+        "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
     }
 
     # Navegação na Sidebar
