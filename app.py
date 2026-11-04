@@ -28,13 +28,16 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    /* APENAS o Botão de Logout fica com fundo azul escuro */
+    /* Botão de Logout destacado com fundo vermelho/escuro e texto visível */
     div[data-testid="stSidebar"] div.stButton > button {
         background-color: #051937 !important;
         color: #ffffff !important;
         border: 1px solid #004d7a !important;
         border-radius: 8px !important;
         font-weight: bold !important;
+    }
+    div[data-testid="stSidebar"] div.stButton > button * {
+        color: #ffffff !important;
     }
     div[data-testid="stSidebar"] div.stButton > button:hover {
         background-color: #004d7a !important;
@@ -102,8 +105,9 @@ def get_challenges():
     except Exception as e:
         st.error(f"Erro ao carregar desafios do Supabase: {e}")
         return []
+
 # ---------------------------------------------------------
-# FUNÇÕES DE AUTENTICAÇÃO E LOGIN (Insira a partir daqui)
+# FUNÇÕES DE AUTENTICAÇÃO E LOGIN
 # ---------------------------------------------------------
 def render_auth_page(key_prefix: str = "main"):
     st.markdown("## 🩺 InovaSUS Connect - Acesso")
@@ -134,62 +138,65 @@ def render_auth_page(key_prefix: str = "main"):
                     st.error(f"Erro ao fazer login: {e}")
 
     # --- TAB CADASTRO ---
-    # --- TAB CADASTRO ---
-        with tab_signup:
-            with st.form(f"{key_prefix}_signup_form"):
-                name = st.text_input("Nome Completo*")
-                email = st.text_input("E-mail*")
-                password = st.text_input("Senha (mínimo 6 caracteres)*", type="password")
-                user_type = st.selectbox("Tipo de Perfil*", ["Profissional de Saúde", "Gestor de Saúde"])
-                ubs = st.text_input("Unidade / Secretaria de Saúde", placeholder="Ex: UBS Centro")
+    with tab_signup:
+        with st.form(f"{key_prefix}_signup_form"):
+            name = st.text_input("Nome Completo*")
+            email = st.text_input("E-mail*")
+            password = st.text_input("Senha (mínimo 6 caracteres)*", type="password")
+            user_type = st.selectbox("Tipo de Perfil*", ["Profissional de Saúde", "Gestor de Saúde"])
+            ubs = st.text_input("Unidade / Secretaria de Saúde", placeholder="Ex: UBS Centro")
 
-                submit_signup = st.form_submit_button("Cadastrar", type="primary")
+            submit_signup = st.form_submit_button("Cadastrar", type="primary")
 
-            if submit_signup:
-                if not name or not email or not password:
-                    st.error("Preencha todos os campos obrigatórios (*).")
-                else:
-                    try:
-                        role_value = "gestor" if user_type == "Gestor de Saúde" else "profissional"
+        if submit_signup:
+            if not name or not email or not password:
+                st.error("Preencha todos os campos obrigatórios (*).")
+            else:
+                try:
+                    role_value = "gestor" if user_type == "Gestor de Saúde" else "profissional"
 
-                        auth_res = supabase.auth.sign_up({
-                            "email": email,
-                            "password": password,
-                            "options": {
-                                "data": {
-                                    "name": name,
-                                    "role": role_value,
-                                    "ubs": ubs
-                                }
+                    auth_res = supabase.auth.sign_up({
+                        "email": email,
+                        "password": password,
+                        "options": {
+                            "data": {
+                                "name": name,
+                                "role": role_value,
+                                "ubs": ubs
                             }
-                        })
+                        }
+                    })
 
-                        st.success("✔ Conta criada com sucesso! Faça login.")
-                    except Exception as e:
-                        st.error(f"Erro ao criar conta: {e}")
+                    st.success("✔ Conta criada com sucesso! Faça login.")
+                except Exception as e:
+                    st.error(f"Erro ao criar conta: {e}")
+
 def logout():
-    supabase.auth.sign_out()
+    try:
+        supabase.auth.sign_out()
+    except Exception:
+        pass
     st.session_state.user = None
     st.session_state.profile = None
     st.rerun()
 
 ACTIVE_PROJECTS = [
     {
-        "name": "Fluxo Vivo — Triagem Inteligente",
+        "title": "Fluxo Vivo — Triagem Inteligente",
         "phase": "Prototipação",
         "progress": 68,
         "ubs": "UBS Jardim das Acácias",
         "squad": "4 pessoas",
     },
     {
-        "name": "Plantão Conectado",
+        "title": "Plantão Conectado",
         "phase": "Ideação",
         "progress": 35,
         "ubs": "UBS Centro Integrado",
         "squad": "3 pessoas",
     },
     {
-        "name": "Cuidar+",
+        "title": "Cuidar+",
         "phase": "Validação",
         "progress": 82,
         "ubs": "UBS Nova Esperança",
@@ -468,7 +475,7 @@ def inject_styles() -> None:
 
 def init_state() -> None:
     defaults = {
-        "page": "Dashboard Principal",
+        "page": "Página Principal",
         "accepted": [],
         "invites": [],
         "ratings": {},
@@ -481,54 +488,6 @@ def init_state() -> None:
             st.session_state[key] = value
 
 
-def sidebar_nav() -> str:
-    # 1. Se o usuário não estiver logado, oculta a sidebar completamente
-    if not st.session_state.get("user"):
-        st.markdown("""
-            <style>
-                [data-testid="stSidebar"] { display: none !important; }
-            </style>
-        """, unsafe_allow_html=True)
-        return ""
-
-    # 2. Se o usuário estiver logado, desenha a barra lateral
-    with st.sidebar:
-        st.markdown("### InovaSUS Connect")
-        
-        user_name = st.session_state.get("profile", {}).get("name", "Usuário")
-        user_role = st.session_state.get("profile", {}).get("role", "Profissional de Saúde")
-        
-        st.markdown(f"**Bem-vindo(a), {user_name}!**")
-        st.caption(f"📌 {user_role}")
-        st.markdown("---")
-
-        st.markdown("**Navegação**")
-
-        pages = [
-            "Mural de Desafios",
-            "Workspace da Trilha",
-            "Vitrine de Soluções",
-            "🏆 Ranking"
-        ]
-
-        if "page" not in st.session_state:
-            st.session_state.page = "Mural de Desafios"
-
-        selected_page = st.radio(
-            "Navegação",
-            pages,
-            index=pages.index(st.session_state.page) if st.session_state.page in pages else 1,
-            label_visibility="collapsed"
-        )
-        st.session_state.page = selected_page
-
-        st.markdown("---")
-
-        # Botão de Sair escuro nativo do Streamlit (type="primary")
-        if st.button("🚪 Sair (Logout)", key="btn_logout_sidebar", use_container_width=True, type="primary"):
-            logout()
-
-    return st.session_state.page
 def page_dashboard() -> None:
     st.markdown(
         f"""
@@ -604,7 +563,6 @@ def page_challenges() -> None:
     except Exception:
         pass
 
-    # Card azul "Problemas Reais dos Serviços" (fora da coluna)
     st.markdown(
         """
         <div class="hero">
@@ -616,13 +574,9 @@ def page_challenges() -> None:
         unsafe_allow_html=True,
     )
 
-    # ---------------------------------------------------------
-    # FORMULÁRIO DE CADASTRO DE NOVO DESAFIO (SUPABASE)
-    # ---------------------------------------------------------
     with st.expander("➕ Cadastrar Novo Desafio do SUS", expanded=False):
         with st.form("new_challenge_form", clear_on_submit=True):
             st.subheader("Registrar Nova Dor da Unidade")
-            
             f_title = st.text_input("Título do Desafio*", placeholder="Ex: Demora na entrega de exames laboratoriais")
             
             col_a, col_b = st.columns(2)
@@ -650,7 +604,6 @@ def page_challenges() -> None:
                     st.error("Por favor, preencha todos os campos obrigatórios (*).")
                 else:
                     try:
-                        # Prepara os dados para inserir na tabela 'desafios' do Supabase
                         new_data = {
                             "title": f_title,
                             "ubs": f_ubs,
@@ -659,25 +612,19 @@ def page_challenges() -> None:
                             "pain": f_pain,
                             "priority": f_priority,
                         }
-                        # Executa o INSERT
                         supabase.table("desafios").insert(new_data).execute()
                         st.success("✅ Desafio cadastrado com sucesso no Supabase!")
-                        st.rerun()  # Recarrega a página para exibir o novo card imediatamente
+                        st.rerun()
                     except Exception as e:
                         st.error(f"Erro ao cadastrar desafio no Supabase: {e}")
 
     st.markdown("---")
 
-    # ---------------------------------------------------------
-    # CONSULTA E EXIBIÇÃO DOS DESAFIOS (SUPABASE)
-    # ---------------------------------------------------------
     challenges_list = get_challenges()
-
     search = st.text_input("Pesquisar desafio, UBS ou cidade")
     f1, f2 = st.columns(2)
 
     units = sorted({item["ubs"] for item in challenges_list if "ubs" in item and item["ubs"]})
-    
     areas = sorted({
         tag for item in challenges_list if "area" in item and isinstance(item["area"], list) 
         for tag in item["area"]
@@ -707,7 +654,6 @@ def page_challenges() -> None:
         st.info("Nenhum desafio encontrado com esses filtros.")
         return
 
-    # Renderização dos Cards
     for i in range(0, len(filtered), 2):
         cols = st.columns(2)
         for col, item in zip(cols, filtered[i : i + 2]):
@@ -731,7 +677,7 @@ def page_challenges() -> None:
                     f"""
                     <div class="card">
                         {tags}{alert}
-                        <h4 style="color:#0b3d91;margin:0.6rem 0 0.25rem 0;">{item_title}</h4>
+                        <h4 style="color:#0b3d91;margin:0.6rem 0 0.2rem 0;">{item_title}</h4>
                         <p class="muted">{item_ubs} · {item_city}</p>
                     </div>
                     """,
@@ -747,6 +693,7 @@ def page_challenges() -> None:
                     if item_id not in st.session_state.accepted:
                         st.session_state.accepted = [*st.session_state.accepted, item_id]
                     st.success(f"Você aceitou o desafio de {item_ubs}.")
+
 
 def page_talents() -> None:
     st.markdown(
@@ -779,7 +726,7 @@ def page_talents() -> None:
     for i, person in enumerate(suggested):
         with cols[i % 2]:
             tags = "".join(f'<span class="tag">{skill}</span>' for skill in person["skills"])
-            invited = person["name"] in st.session_state.invites
+            invited = person["name"] in st.session_state.get("invites", [])
             st.markdown(
                 f"""
                 <div class="card">
@@ -793,6 +740,8 @@ def page_talents() -> None:
             )
             label = "Convite enviado" if invited else "Convidar para o Squad"
             if st.button(label, key=f"invite_{i}", use_container_width=True, type="primary"):
+                if "invites" not in st.session_state:
+                    st.session_state.invites = []
                 if person["name"] not in st.session_state.invites:
                     st.session_state.invites = [*st.session_state.invites, person["name"]]
                 st.success(f"Convite enviado para {person['name']}.")
@@ -847,7 +796,7 @@ def page_workspace() -> None:
     with c1:
         if st.button("Abrir Canvas Clínico", use_container_width=True, type="primary"):
             st.session_state.canvas = True
-        if st.session_state.canvas:
+        if st.session_state.get("canvas"):
             st.markdown(
                 """
                 <div class="card">
@@ -863,7 +812,7 @@ def page_workspace() -> None:
     with c2:
         if st.button("Agendar Mentoria", use_container_width=True):
             st.session_state.mentoria = True
-        if st.session_state.mentoria:
+        if st.session_state.get("mentoria"):
             date = st.date_input("Data da mentoria")
             slot = st.selectbox("Horário", ["09:00", "11:00", "14:00", "16:30"])
             if st.button("Confirmar mentoria", type="primary"):
@@ -909,22 +858,25 @@ def page_showcase() -> None:
                     "Avaliação por estrelas",
                     min_value=1,
                     max_value=5,
-                    value=st.session_state.ratings.get(solution["title"], 4),
+                    value=st.session_state.get("ratings", {}).get(solution["title"], 4),
                     key=f"rate_{i}",
                     help="1 estrela = pouco útil · 5 estrelas = pronta para escala",
                 )
+                if "ratings" not in st.session_state:
+                    st.session_state.ratings = {}
                 st.session_state.ratings[solution["title"]] = rating
                 st.caption("★" * rating + "☆" * (5 - rating))
-                requested = solution["title"] in st.session_state.pilots
+                requested = solution["title"] in st.session_state.get("pilots", [])
                 label = "Piloto solicitado" if requested else "Solicitar Piloto"
                 if st.button(label, key=f"pilot_{i}", type="primary"):
+                    if "pilots" not in st.session_state:
+                        st.session_state.pilots = []
                     if solution["title"] not in st.session_state.pilots:
                         st.session_state.pilots = [*st.session_state.pilots, solution["title"]]
                     st.success(f"Solicitação de piloto enviada para {solution['title']}.")
             st.divider()
-# ---------------------------------------------------------
-# PÁGINA: VITRINE DE SOLUÇÕES
-# ---------------------------------------------------------
+
+
 def page_solutions() -> None:
     st.markdown("## 💡 Vitrine de Soluções")
     st.markdown("Explore as soluções e inovações aplicadas para transformar os serviços de saúde.")
@@ -981,57 +933,28 @@ def page_solutions() -> None:
                     st.write(f"**Status atual:** {sol['status']}")
                     st.button("Entrar em contato com o autor", key=f"btn_sol_{index}")
 
-def main():
-    # Se não estiver logado, exibe apenas a tela de login/cadastro
-    if "user" not in st.session_state or st.session_state.user is None:
-        st.markdown("""
-            <style>
-                [data-testid="stSidebar"] { display: none !important; }
-            </style>
-        """, unsafe_allow_html=True)
-        render_auth_page()
-        return
-
-    # USUÁRIO LOGADO: Renderiza a barra lateral
-    profile = st.session_state.get("profile", {})
-    user_name = profile.get("name", "Usuário")
-    user_role = "Gestor" if profile.get("role") == "gestor" else "Profissional de Saúde"
-    user_ubs = profile.get("ubs", "N/A")
-
-    st.sidebar.markdown("### 🏥 InovaSUS Connect")
-    st.sidebar.markdown(f"**Bem-vindo(a), {user_name}!**")
-    st.sidebar.caption(f"📌 {user_role} · {user_ubs}")
-    st.sidebar.markdown("---")
-
-    # Dicionário seguro com as páginas ativas da aplicação
-    pages = {
-        "Página Principal": page_dashboard if "page_dashboard" in globals() else (lambda: st.info("Página Principal em desenvolvimento.")),
-        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_challenges,
-        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento."),
-        "Vitrine de Soluções": page_solutions,
-        "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
-    }
-
-# ==========================================
-# FUNÇÕES AUXILIARES E PÁGINAS ADICIONAIS
-# ==========================================
 
 def render_ranking_page():
     st.header("🏆 Ranking de Soluções dos Alunos")
-    res = supabase.table("ranking_alunos").select("*").execute()
-    if res.data:
-        st.dataframe(
-            res.data,
-            column_config={
-                "nome_aluno": "Aluno / Squad",
-                "instituicao": "Unidade / UBS",
-                "total_votos": "Total de Avaliações",
-                "media_nota": st.column_config.NumberColumn("Média", format="%.1f"),
-                "pontuacao_total": "Pontuação Total",
-            },
-            hide_index=True,
-            use_container_width=True,
-        )
+    try:
+        res = supabase.table("ranking_alunos").select("*").execute()
+        if res.data:
+            st.dataframe(
+                res.data,
+                column_config={
+                    "nome_aluno": "Aluno / Squad",
+                    "instituicao": "Unidade / UBS",
+                    "total_votos": "Total de Avaliações",
+                    "media_nota": st.column_config.NumberColumn("Média", format="%.1f"),
+                    "pontuacao_total": "Pontuação Total",
+                },
+                hide_index=True,
+                use_container_width=True,
+            )
+        else:
+            st.info("Nenhum dado cadastrado no ranking.")
+    except Exception:
+        st.info("Ranking de soluções em processamento.")
 
 
 def render_votacao_gestor(solution_id, aluno_id):
@@ -1059,27 +982,56 @@ def render_votacao_gestor(solution_id, aluno_id):
 # ==========================================
 
 def main():
+    init_state()
+
+    # Se não estiver logado, exibe apenas a tela de login/cadastro
+    if "user" not in st.session_state or st.session_state.user is None:
+        st.markdown("""
+            <style>
+                [data-testid="stSidebar"] { display: none !important; }
+            </style>
+        """, unsafe_allow_html=True)
+        render_auth_page()
+        return
+
+    # USUÁRIO LOGADO: Renderiza a barra lateral
+    profile = st.session_state.get("profile", {})
+    user_name = profile.get("name", "Usuário")
+    user_role = "Gestor" if profile.get("role") == "gestor" else "Profissional de Saúde"
+    user_ubs = profile.get("ubs", "N/A")
+
+    st.sidebar.markdown("### 🏥 InovaSUS Connect")
+    st.sidebar.markdown(f"**Bem-vindo(a), {user_name}!**")
+    st.sidebar.caption(f"📌 {user_role} · {user_ubs}")
+    st.sidebar.markdown("---")
+
     pages = {
         "Página Principal": page_dashboard,
-        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_dashboard,
-        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento"),
-        "Vitrine de Soluções": page_solutions if "page_solutions" in globals() else page_dashboard,
+        "Mural de Desafios": page_challenges,
+        "Workspace da Trilha": page_workspace,
+        "Vitrine de Soluções": page_solutions,
         "🏆 Ranking": render_ranking_page,
     }
 
-    # Tratamento de redirecionamento para o Mural
+    # Redirecionamento seguro acionado pelo botão "Novo desafio"
     if st.session_state.get("go_mural"):
         st.session_state["go_mural"] = False
-        page_selected = "Mural de Desafios"
-    else:
-        page_selected = st.sidebar.radio("Navegação", list(pages.keys()), key="sidebar_nav_radio")
+        st.session_state["nav_radio_choice"] = "Mural de Desafios"
 
-    # Executa a página selecionada uma única vez
+    if "nav_radio_choice" not in st.session_state:
+        st.session_state["nav_radio_choice"] = "Página Principal"
+
+    page_selected = st.sidebar.radio(
+        "Navegação", 
+        list(pages.keys()), 
+        key="nav_radio_choice"
+    )
+
     if page_selected in pages:
         pages[page_selected]()
 
-    # Botão de Logout no rodapé
-    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_final", use_container_width=True):
+    st.sidebar.markdown("---")
+    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_sidebar_final", use_container_width=True):
         logout()
 
 
