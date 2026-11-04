@@ -584,7 +584,7 @@ def page_challenges() -> None:
         <div class="hero">
             <div class="brand-mark">Mural de Desafios</div>
             <h1>Problemas Reais dos Serviços</h1>
-            <p>Encontre um desafio de unidade, detalhe o problema e aceite com o seu grupo.</p>
+            <p>Encontre um desafio de unidade, veja detalhes do problema e aceite com o seu grupo.</p>
         </div>
         """,
         unsafe_allow_html=True,
