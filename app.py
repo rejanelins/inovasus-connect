@@ -564,19 +564,26 @@ def page_dashboard() -> None:
     cols = st.columns(3)
     for i, project in enumerate(ACTIVE_PROJECTS):
         col_idx = i % 3
+        
+        # Leitura segura das chaves para evitar KeyError
+        title = project.get("title") or project.get("titulo") or "Projeto sem título"
+        phase = project.get("phase") or project.get("fase") or "Em andamento"
+        ubs = project.get("ubs") or "Unidade de Saúde"
+        squad = project.get("squad") or "Equipe"
+        progress = project.get("progress", 0)
+
         with cols[col_idx]:
             st.markdown(
                 f"""
                 <div class="card">
-                    <span class="tag">{project['phase']}</span>
-                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{project['title']}</h4>
-                    <p class="muted">{project['ubs']} · {project['squad']}</p>
+                    <span class="tag">{phase}</span>
+                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{title}</h4>
+                    <p class="muted">{ubs} · {squad}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-            st.progress(project["progress"] / 100, text=f"{project['progress']}% concluído")
-
+            st.progress(progress / 100 if progress <= 100 else 1.0, text=f"{progress}% concluído")
 def page_challenges() -> None:
     # Exibe a ilustração centralizada com fundo branco forçado via CSS
     import base64
