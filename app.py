@@ -933,8 +933,7 @@ def main():
     page = st.sidebar.radio("Navegação", list(pages.keys()))
 
     st.sidebar.markdown("---")
-    if st.sidebar.button("🚪 Sair (Logout)", use_container_width=True):
-        logout()
+  
 
     # Executa a página selecionada
     pages[page]()
