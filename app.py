@@ -584,7 +584,7 @@ def page_challenges() -> None:
         <div class="hero">
             <div class="brand-mark">Mural de Desafios</div>
             <h1>Problemas Reais dos Serviços</h1>
-            <p>Encontre um desafio de unidade, detalhe a dor e aceite com o seu squad.</p>
+            <p>Encontre um desafio de unidade, detalhe o problema e aceite com o seu grupo.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -930,7 +930,7 @@ def main():
         "Vitrine de Soluções": page_management if "page_management" in globals() else lambda: st.info("Vitrine de Soluções em desenvolvimento"),
         "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else lambda: st.info("🏆 Ranking em desenvolvimento")
     }
-    
+
     # Navegação na Sidebar
     page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
 
