@@ -22,6 +22,19 @@ st.markdown(
         color: #ffffff !important;
     }
     
+    /* Estilização do Botão de Sair (Logout) em Azul Escuro */
+    div[data-testid="stSidebar"] div.stButton > button {
+        background-color: #0b2545 !important;
+        color: #ffffff !important;
+        border: 1px solid #133c55 !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+    }
+    div[data-testid="stSidebar"] div.stButton > button:hover {
+        background-color: #133c55 !important;
+        border-color: #386fa4 !important;
+    }
+    
     /* Estilização dos Cards e Hero */
     .hero {
         background: linear-gradient(135deg, #0b3d91 0%, #1e5bb8 100%);
