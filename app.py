@@ -18,32 +18,29 @@ st.markdown(
     [data-testid="stSidebar"] {
         background-color: #0b3d91 !important;
     }
-    
-    /* Botão de Logout personalizado em azul escuro */
-    div[data-testid="stSidebar"] button {
-        background-color: #071e3d !important;
+
+    /* Força TODOS os textos da barra lateral a ficarem em BRANCO visível */
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] div {
         color: #ffffff !important;
-        border: 1px solid #1b4965 !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
     }
-    div[data-testid="stSidebar"] button:hover {
-        background-color: #1b4965 !important;
-        color: #ffffff !important;
-    }    
-    /* Estilização do Botão de Sair (Logout) em Azul Escuro */
+
+    /* APENAS o Botão de Logout fica com fundo azul escuro */
     div[data-testid="stSidebar"] div.stButton > button {
-        background-color: #0b2545 !important;
+        background-color: #051937 !important;
         color: #ffffff !important;
-        border: 1px solid #133c55 !important;
+        border: 1px solid #004d7a !important;
         border-radius: 8px !important;
         font-weight: bold !important;
     }
     div[data-testid="stSidebar"] div.stButton > button:hover {
-        background-color: #133c55 !important;
-        border-color: #386fa4 !important;
+        background-color: #004d7a !important;
+        color: #ffffff !important;
     }
-
+    
     /* Estilização dos Cards e Hero */
     .hero {
         background: linear-gradient(135deg, #0b3d91 0%, #1e5bb8 100%);
