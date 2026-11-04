@@ -1012,79 +1012,76 @@ def main():
         "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
     }
 
-    # Se o botão "Novo desafio" foi clicado, seleciona o Mural
-    if st.session_state.get("go_mural"):
-        st.session_state["go_mural"] = False
-        default_index = list(pages.keys()).index("Mural de Desafios") if "Mural de Desafios" in pages else 0
-    else:
-        default_index = 0
+# ==========================================
+# FUNÇÕES AUXILIARES E PÁGINAS ADICIONAIS
+# ==========================================
 
-    # Navegação original da Sidebar
-    page_selected = st.sidebar.radio("Navegação", list(pages.keys()), index=default_index)
-
-    # Executa a função da página selecionada
-    if page_selected in pages:
-        pages[page_selected]()
-
-    # Botão de Logout nativo no rodapé da sidebar
-    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True):
-        logout()
-
-    # Botão de Logout nativo no rodapé da sidebar
-    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True):
-        logout()
-
-
-if __name__ == "__main__":
-    main()
-
-    import streamlit as st
-
-# Exemplo de exibição do Ranking
 def render_ranking_page():
     st.header("🏆 Ranking de Soluções dos Alunos")
-    
-    # Busca os dados calculados da VIEW do Supabase
     res = supabase.table("ranking_alunos").select("*").execute()
-    
     if res.data:
-        # Exibe em formato de tabela elegante
         st.dataframe(
             res.data,
             column_config={
                 "nome_aluno": "Aluno / Squad",
                 "instituicao": "Unidade / UBS",
                 "total_votos": "Total de Avaliações",
-                "media_nota": st.column_config.NumberColumn("Média", format="%.1f ⭐"),
-                "pontuacao_total": "Pontuação Total"
+                "media_nota": st.column_config.NumberColumn("Média", format="%.1f"),
+                "pontuacao_total": "Pontuação Total",
             },
             hide_index=True,
-            use_container_width=True
+            use_container_width=True,
         )
-    else:
-        st.info("Nenhuma avaliação registrada ainda.")
 
-# Exemplo de componente de Votação (Apenas para Gestores)
+
 def render_votacao_gestor(solution_id, aluno_id):
     user_role = st.session_state.get("profile", {}).get("role")
-    
     if user_role == "gestor":
-        st.subheader("⭐ Avaliar esta Solução")
+        st.subheader("★ Avaliar esta Solução")
         nota = st.slider("Nota da solução (1 a 5)", 1, 5, 5, key=f"score_{solution_id}")
-        
-        if st.button("Enviar Voto", key=f"btn_{solution_id}"):
+        if st.button("Enviar Voto", key=f"btn_vote_{solution_id}"):
             try:
                 gestor_id = st.session_state.user.id
-                
-                # Insere ou atualiza o voto do gestor
                 supabase.table("votes").upsert({
                     "gestor_id": gestor_id,
                     "solution_id": solution_id,
                     "aluno_id": aluno_id,
-                    "score": nota
+                    "score": nota,
                 }).execute()
-                
                 st.success("Voto registrado com sucesso!")
                 st.rerun()
             except Exception as e:
                 st.error(f"Erro ao salvar voto: {e}")
+
+
+# ==========================================
+# FUNÇÃO PRINCIPAL (MAIN) E NAVEGAÇÃO
+# ==========================================
+
+def main():
+    pages = {
+        "Página Principal": page_dashboard,
+        "Mural de Desafios": render_mural_desafios if "render_mural_desafios" in globals() else page_dashboard,
+        "Workspace da Trilha": lambda: st.info("Workspace da Trilha em desenvolvimento"),
+        "Vitrine de Soluções": page_solutions if "page_solutions" in globals() else page_dashboard,
+        "🏆 Ranking": render_ranking_page,
+    }
+
+    # Tratamento de redirecionamento para o Mural
+    if st.session_state.get("go_mural"):
+        st.session_state["go_mural"] = False
+        page_selected = "Mural de Desafios"
+    else:
+        page_selected = st.sidebar.radio("Navegação", list(pages.keys()), key="sidebar_nav_radio")
+
+    # Executa a página selecionada uma única vez
+    if page_selected in pages:
+        pages[page_selected]()
+
+    # Botão de Logout no rodapé
+    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_final", use_container_width=True):
+        logout()
+
+
+if __name__ == "__main__":
+    main()
