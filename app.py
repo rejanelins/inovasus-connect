@@ -579,10 +579,11 @@ def page_dashboard() -> None:
             st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
 
 def page_challenges() -> None:
+    st.image("assets/hero_health.jpg", use_container_width=True)
     st.markdown(
         """
         <div class="hero">
-            <div class="brand-mark">Mural de Desafios</div>
+         <div class="brand-mark">Mural de Desafios</div>
             <h1>Problemas Reais dos Serviços</h1>
             <p>Encontre um desafio de unidade, veja detalhes do problema e aceite com o seu grupo.</p>
         </div>
