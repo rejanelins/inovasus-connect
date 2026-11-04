@@ -1012,17 +1012,23 @@ def main():
         "🏆 Ranking": render_ranking_page if "render_ranking_page" in globals() else (lambda: st.info("Ranking em desenvolvimento."))
     }
 
-    # Redirecionamento seguro para o Mural de Desafios, se acionado
+    # Se o botão "Novo desafio" foi clicado, seleciona o Mural
     if st.session_state.get("go_mural"):
         st.session_state["go_mural"] = False
-        page_selected = "Mural de Desafios"
+        default_index = list(pages.keys()).index("Mural de Desafios") if "Mural de Desafios" in pages else 0
     else:
-        # Navegação padrão na Sidebar
-        page_selected = st.sidebar.radio("Navegação", list(pages.keys()))
+        default_index = 0
+
+    # Navegação original da Sidebar
+    page_selected = st.sidebar.radio("Navegação", list(pages.keys()), index=default_index)
 
     # Executa a função da página selecionada
     if page_selected in pages:
         pages[page_selected]()
+
+    # Botão de Logout nativo no rodapé da sidebar
+    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True):
+        logout()
 
     # Botão de Logout nativo no rodapé da sidebar
     if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_main", use_container_width=True):
