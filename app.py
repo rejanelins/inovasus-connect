@@ -14,14 +14,23 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Estilização da Barra Lateral */
+/* Estilização da Barra Lateral */
     [data-testid="stSidebar"] {
-        background-color: #0b3d91;
-    }
-    [data-testid="stSidebar"] * {
-        color: #ffffff !important;
+        background-color: #0b3d91 !important;
     }
     
+    /* Botão de Logout personalizado em azul escuro */
+    div[data-testid="stSidebar"] button {
+        background-color: #071e3d !important;
+        color: #ffffff !important;
+        border: 1px solid #1b4965 !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+    }
+    div[data-testid="stSidebar"] button:hover {
+        background-color: #1b4965 !important;
+        color: #ffffff !important;
+    }    
     /* Estilização do Botão de Sair (Logout) em Azul Escuro */
     div[data-testid="stSidebar"] div.stButton > button {
         background-color: #0b2545 !important;
@@ -34,7 +43,7 @@ st.markdown(
         background-color: #133c55 !important;
         border-color: #386fa4 !important;
     }
-    
+
     /* Estilização dos Cards e Hero */
     .hero {
         background: linear-gradient(135deg, #0b3d91 0%, #1e5bb8 100%);
@@ -476,57 +485,57 @@ def init_state() -> None:
 
 
 def sidebar_nav() -> str:
-    pages = [
-        "Dashboard Principal",
-        "Mural de Desafios",
-        "Radar de Talentos",
-        "Workspace da Trilha",
-        "Vitrine de Soluções",
-        "🏆 Ranking"
-    ]
+    # Mostra a barra lateral APENAS se o utilizador estiver autenticado
+    if not st.session_state.get("user"):
+        # Oculta a barra lateral na tela de login
+        st.markdown("""
+            <style>
+                [data-testid="stSidebar"] {
+                    display: none !important;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+        return ""
 
-    # Garante que haja uma pagina padrao inicial
-    if "page" not in st.session_state:
-        st.session_state.page = "Mural de Desafios"
+    # Se o utilizador estiver logado, desenha a barra lateral
+    with st.sidebar:
+        st.markdown("### InovaSUS Connect")
+        
+        user_name = st.session_state.get("profile", {}).get("name", "Usuário")
+        user_role = st.session_state.get("profile", {}).get("role", "Profissional de Saúde")
+        st.markdown(f"**Bem-vindo(a), {user_name}!**")
+        st.caption(f"📌 {user_role}")
+        st.markdown("---")
 
-# --- BARRA LATERAL (SIDEBAR) CORRIGIDA E ESTILIZADA ---
-with st.sidebar:
-    st.markdown("### InovaSUS Connect")
-    
-    # Exibe informacoes do usuario logado
-    user_name = st.session_state.get("profile", {}).get("name", "Usuário")
-    user_role = st.session_state.get("profile", {}).get("role", "Profissional de Saúde")
-    st.markdown(f"**Bem-vindo(a), {user_name}!**")
-    st.caption(f"📌 {user_role}")
-    st.markdown("---")
+        st.markdown("**Navegação**")
 
-    st.markdown("**Navegação**")
+        pages = [
+            "Dashboard Principal",
+            "Mural de Desafios",
+            "Radar de Talentos",
+            "Workspace da Trilha",
+            "Vitrine de Soluções",
+            "🏆 Ranking"
+        ]
 
-    # Lista completa de paginas
-    pages = [
-        "Dashboard Principal",
-        "Mural de Desafios",
-        "Radar de Talentos",
-        "Workspace da Trilha",
-        "Vitrine de Soluções",
-        "🏆 Ranking"
-    ]
+        if "page" not in st.session_state:
+            st.session_state.page = "Mural de Desafios"
 
-    # Garante a pagina padrao
-    if "page" not in st.session_state:
-        st.session_state.page = "Mural de Desafios"
+        selected_page = st.radio(
+            "Navegação",
+            pages,
+            index=pages.index(st.session_state.page) if st.session_state.page in pages else 1,
+            label_visibility="collapsed"
+        )
+        st.session_state.page = selected_page
 
-    # Selecao de paginas usando Radio Button (estilo limpo com marcadores vermelhos/brancos)
-    selected_page = st.radio(
-        "Navegação",
-        pages,
-        index=pages.index(st.session_state.page) if st.session_state.page in pages else 1,
-        label_visibility="collapsed"
-    )
-    st.session_state.page = selected_page
+        st.markdown("---")
 
-    st.markdown("---")
+        # Botão Logout em azul escuro sem caixa branca
+        if st.button("🚪 Sair (Logout)", key="btn_logout_sidebar", use_container_width=True):
+            logout()
 
+    return st.session_state.page
     # BOTAO SAIR (Logout) ESTILIZADO SEM FUNDO BRANCO
     # Aplicamos CSS local para transformar o botao em um estilo escuro elegante
     st.markdown("""
