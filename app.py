@@ -550,22 +550,20 @@ def page_dashboard() -> None:
 
     st.subheader("Ações rápidas")
     a1, a2, a3, a4 = st.columns(4)
-    if a1.button("Novo desafio", key="btn_dash_1", use_container_width=True, type="primary"):
+    if a1.button("Novo desafio", key="btn_dash_novo", use_container_width=True, type="primary"):
         st.session_state["go_mural"] = True
         st.toast("Abra o Mural de Desafios na barra lateral para publicar.")
-    if a2.button("Montar squad", key="btn_dash_2", use_container_width=True):
+    if a2.button("Montar squad", key="btn_dash_squad", use_container_width=True):
         st.toast("Use o Radar de Talentos para convidar colegas.")
-    if a3.button("Abrir trilha", key="btn_dash_3", use_container_width=True):
+    if a3.button("Abrir trilha", key="btn_dash_trilha", use_container_width=True):
         st.toast("A trilha está na fase de Prototipação.")
-    if a4.button("Ver vitrine", key="btn_dash_4", use_container_width=True):
+    if a4.button("Ver vitrine", key="btn_dash_vitrine", use_container_width=True):
         st.toast("Confira soluções prontas para piloto.")
 
     st.subheader("Projetos ativos")
     cols = st.columns(3)
     for i, project in enumerate(ACTIVE_PROJECTS):
         col_idx = i % 3
-        
-        # Leitura segura das chaves para evitar KeyError
         title = project.get("title") or project.get("titulo") or "Projeto sem título"
         phase = project.get("phase") or project.get("fase") or "Em andamento"
         ubs = project.get("ubs") or "Unidade de Saúde"
@@ -584,8 +582,9 @@ def page_dashboard() -> None:
                 unsafe_allow_html=True,
             )
             st.progress(progress / 100 if progress <= 100 else 1.0, text=f"{progress}% concluído")
+
+
 def page_challenges() -> None:
-    # Exibe a ilustração centralizada com fundo branco forçado via CSS
     import base64
 
     try:
