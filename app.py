@@ -580,13 +580,13 @@ def page_dashboard() -> None:
 
 def page_challenges() -> None:
 # Exibe a ilustração centralizada com fundo branco forçado via CSS
-    import base64
+import base64
 
     try:
         with open("assets/hero_health.jpg", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
 
-_, col_center, _ = st.columns([1, 2, 1])
+        _, col_center, _ = st.columns([1, 2, 1])
         with col_center:
             st.markdown(
                 f"""
