@@ -579,8 +579,10 @@ def page_dashboard() -> None:
             st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
 
 def page_challenges() -> None:
-    st.image("assets/hero_health.jpg", use_container_width=True)
-    st.markdown(
+# Ajusta a largura da imagem para alinhar com o card
+    _, col_center, _ = st.columns([1, 8, 1])
+    with col_center:
+        st.image("assets/hero_health.jpg", use_container_width=True)    st.markdown(
         """
         <div class="hero">
          <div class="brand-mark">Mural de Desafios</div>
