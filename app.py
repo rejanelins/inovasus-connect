@@ -40,7 +40,7 @@ st.markdown(
         background-color: #004d7a !important;
         color: #ffffff !important;
     }
-    
+
     /* Estilização dos Cards e Hero */
     .hero {
         background: linear-gradient(135deg, #0b3d91 0%, #1e5bb8 100%);
@@ -482,24 +482,22 @@ def init_state() -> None:
 
 
 def sidebar_nav() -> str:
-    # Mostra a barra lateral APENAS se o utilizador estiver autenticado
+    # 1. Se o usuário não estiver logado, oculta a sidebar completamente
     if not st.session_state.get("user"):
-        # Oculta a barra lateral na tela de login
         st.markdown("""
             <style>
-                [data-testid="stSidebar"] {
-                    display: none !important;
-                }
+                [data-testid="stSidebar"] { display: none !important; }
             </style>
         """, unsafe_allow_html=True)
         return ""
 
-    # Se o utilizador estiver logado, desenha a barra lateral
+    # 2. Se o usuário estiver logado, desenha a barra lateral
     with st.sidebar:
         st.markdown("### InovaSUS Connect")
         
         user_name = st.session_state.get("profile", {}).get("name", "Usuário")
         user_role = st.session_state.get("profile", {}).get("role", "Profissional de Saúde")
+        
         st.markdown(f"**Bem-vindo(a), {user_name}!**")
         st.caption(f"📌 {user_role}")
         st.markdown("---")
@@ -528,32 +526,11 @@ def sidebar_nav() -> str:
 
         st.markdown("---")
 
-        # Botão Logout em azul escuro sem caixa branca
-        if st.button("🚪 Sair (Logout)", key="btn_logout_sidebar", use_container_width=True):
+        # Botão de Sair escuro nativo do Streamlit (type="primary")
+        if st.button("🚪 Sair (Logout)", key="btn_logout_sidebar", use_container_width=True, type="primary"):
             logout()
 
     return st.session_state.page
-    # BOTAO SAIR (Logout) ESTILIZADO SEM FUNDO BRANCO
-    # Aplicamos CSS local para transformar o botao em um estilo escuro elegante
-    st.markdown("""
-        <style>
-        div[data-testid="stSidebar"] button[kind="secondary"] {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            transition: all 0.3s ease;
-        }
-        div[data-testid="stSidebar"] button[kind="secondary"]:hover {
-            background-color: #d32f2f !important;
-            color: #ffffff !important;
-            border-color: #d32f2f !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    if st.button("🚪 Sair (Logout)", use_container_width=True):
-        logout()
-
 def page_dashboard() -> None:
     st.markdown(
         f"""
