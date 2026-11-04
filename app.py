@@ -582,23 +582,22 @@ def page_challenges() -> None:
 # Exibe a ilustração centralizada com fundo branco forçado via CSS
     import base64
 
-    with open("assets/hero_health.jpg", "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read()).decode()
+    try:
+        with open("assets/hero_health.jpg", "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
 
-    _, col_center, _ = st.columns([1, 2, 1])
-    with col_center:
-        st.markdown(
-            f"""
-            <div style="background-color: #ffffff; padding: 12px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px;">
-                <img src="data:image/jpeg;base64,{encoded_string}" style="max-width: 260px; width: 100%; height: auto; border-radius: 8px;">
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    _, col_center, _ = st.columns([1, 2, 1])
-    with col_center:
-        st.image(img_white_bg, width=280)
+        _, col_center, _ = st.columns([1, 2, 1])
+        with col_center:
+            st.markdown(
+                f"""
+                <div style="background-color: #ffffff; padding: 12px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px;">
+                    <img src="data:image/jpeg;base64,{encoded_string}" style="max-width: 260px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+    except Exception:
+        pass
 
     # Card azul "Problemas Reais dos Serviços" (fora da coluna)
     st.markdown(
