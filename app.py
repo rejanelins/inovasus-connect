@@ -476,26 +476,64 @@ def sidebar_nav() -> str:
     if "page" not in st.session_state:
         st.session_state.page = "Mural de Desafios"
 
-    with st.sidebar:
-        st.markdown("### InovaSUS Connect")
-        st.caption("Inovação aberta na ponta do SUS")
-        st.markdown("---")
-        
-        for item in pages:
-            is_current = st.session_state.page == item
-            btn_type = "primary" if is_current else "secondary"
-            
-            if st.button(item, key=f"nav_{item}", use_container_width=True, type=btn_type):
-                st.session_state.page = item
-                st.rerun()  # <--- Forca a atualização imediata da tela ao clicar
+# --- BARRA LATERAL (SIDEBAR) CORRIGIDA E ESTILIZADA ---
+with st.sidebar:
+    st.markdown("### InovaSUS Connect")
+    
+    # Exibe informacoes do usuario logado
+    user_name = st.session_state.get("profile", {}).get("name", "Usuário")
+    user_role = st.session_state.get("profile", {}).get("role", "Profissional de Saúde")
+    st.markdown(f"**Bem-vindo(a), {user_name}!**")
+    st.caption(f"📌 {user_role}")
+    st.markdown("---")
 
-        st.markdown("---")
-        st.markdown(f"**{USER_NAME}**")
-        st.caption(USER_ROLE)
-        st.caption("Rede APS · Pernambuco")
+    st.markdown("**Navegação**")
 
-    return st.session_state.page
+    # Lista completa de paginas
+    pages = [
+        "Dashboard Principal",
+        "Mural de Desafios",
+        "Radar de Talentos",
+        "Workspace da Trilha",
+        "Vitrine de Soluções",
+        "🏆 Ranking"
+    ]
 
+    # Garante a pagina padrao
+    if "page" not in st.session_state:
+        st.session_state.page = "Mural de Desafios"
+
+    # Selecao de paginas usando Radio Button (estilo limpo com marcadores vermelhos/brancos)
+    selected_page = st.radio(
+        "Navegação",
+        pages,
+        index=pages.index(st.session_state.page) if st.session_state.page in pages else 1,
+        label_visibility="collapsed"
+    )
+    st.session_state.page = selected_page
+
+    st.markdown("---")
+
+    # BOTAO SAIR (Logout) ESTILIZADO SEM FUNDO BRANCO
+    # Aplicamos CSS local para transformar o botao em um estilo escuro elegante
+    st.markdown("""
+        <style>
+        div[data-testid="stSidebar"] button[kind="secondary"] {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.3s ease;
+        }
+        div[data-testid="stSidebar"] button[kind="secondary"]:hover {
+            background-color: #d32f2f !important;
+            color: #ffffff !important;
+            border-color: #d32f2f !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("🚪 Sair (Logout)", use_container_width=True):
+        logout()
 
 def page_dashboard() -> None:
     st.markdown(
