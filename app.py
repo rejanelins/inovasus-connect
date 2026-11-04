@@ -535,7 +535,7 @@ def page_dashboard() -> None:
         <div class="hero">
             <div class="brand-mark">InovaSUS Connect</div>
             <h1>Olá, {USER_NAME}</h1>
-            <p>Sua rede de inovação na Atenção Primária está ativa. Continue gerando impacto clínico com o seu squad.</p>
+            <p>Sua rede de inovação na Atenção Primária está ativa. Continue transformando a saúde!</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -550,31 +550,32 @@ def page_dashboard() -> None:
 
     st.subheader("Ações rápidas")
     a1, a2, a3, a4 = st.columns(4)
-    if a1.button("Novo desafio", use_container_width=True, type="primary"):
+    if a1.button("Novo desafio", key="btn_dash_1", use_container_width=True, type="primary"):
         st.session_state["go_mural"] = True
-        st.toast("Abra o Mural de Desafios na barra lateral para publicar ou aceitar.")
-    if a2.button("Montar squad", use_container_width=True):
+        st.toast("Abra o Mural de Desafios na barra lateral para publicar.")
+    if a2.button("Montar squad", key="btn_dash_2", use_container_width=True):
         st.toast("Use o Radar de Talentos para convidar colegas.")
-    if a3.button("Abrir trilha", use_container_width=True):
+    if a3.button("Abrir trilha", key="btn_dash_3", use_container_width=True):
         st.toast("A trilha está na fase de Prototipação.")
-    if a4.button("Ver vitrine", use_container_width=True):
+    if a4.button("Ver vitrine", key="btn_dash_4", use_container_width=True):
         st.toast("Confira soluções prontas para piloto.")
 
     st.subheader("Projetos ativos")
     cols = st.columns(3)
     for i, project in enumerate(ACTIVE_PROJECTS):
-        with cols[i]:
+        col_idx = i % 3
+        with cols[col_idx]:
             st.markdown(
                 f"""
                 <div class="card">
                     <span class="tag">{project['phase']}</span>
-                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{project['name']}</h4>
+                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{project['title']}</h4>
                     <p class="muted">{project['ubs']} · {project['squad']}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-            st.progress(project["progress"] / 100, text=f"{project['progress']}% da trilha")
+            st.progress(project["progress"] / 100, text=f"{project['progress']}% concluído")
 
 def page_challenges() -> None:
     # Exibe a ilustração centralizada com fundo branco forçado via CSS
