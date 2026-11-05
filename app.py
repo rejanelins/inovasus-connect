@@ -244,7 +244,6 @@ def page_dashboard() -> None:
     profile = st.session_state.get("profile", {})
     user_name = profile.get("name", USER_NAME)
 
-    # NOVO CABEÇALHO (Com o texto exato da imagem)
     st.markdown(
         f"""
         <div class="hero">
@@ -509,7 +508,6 @@ def page_active_challenge() -> None:
 
 
 def page_solutions() -> None:
-    # CABEÇALHO PADRONIZADO DA VITRINE
     st.markdown(
         """
         <div class="hero">
@@ -594,7 +592,20 @@ def page_solutions() -> None:
                         )
 
 def render_ranking_page():
-    st.header("🏆 Ranking de Soluções dos Alunos")
+    # NOVO CABEÇALHO PADRÃO SEM O EMOJI
+    st.markdown(
+        """
+        <div class="hero">
+            <div class="brand-mark">Classificação</div>
+            <h1 style="margin: 0;">Ranking de Soluções dos Alunos</h1>
+            <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.95;">
+                Acompanhe o desempenho e a avaliação das propostas desenvolvidas pelas equipes.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
     try:
         res = supabase.table("ranking_alunos").select("*").execute()
         if res.data:
@@ -682,7 +693,7 @@ def main():
         "Mural de Desafios", 
         "Desafio em Andamento", 
         "Vitrine de Soluções", 
-        "🏆 Ranking"
+        "Ranking"  # <-- Emoji removido
     ]
 
     col_nav, col_profile = st.columns([5, 1])
@@ -730,7 +741,7 @@ def main():
         page_active_challenge()
     elif selected_page == "Vitrine de Soluções":
         page_solutions()
-    elif selected_page == "🏆 Ranking":
+    elif selected_page == "Ranking": # <-- Emoji removido
         render_ranking_page()
     elif selected_page == "Editar Perfil":
         page_edit_profile()
