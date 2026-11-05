@@ -5,44 +5,18 @@ st.set_page_config(
     page_title="InovaSUS Connect",
     page_icon="🩺",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed", # Inicia recolhida (e ocultada via CSS)
 )
 
 # ---------------------------------------------------------
-# 1. ESTILO CSS CUSTOMIZADO (Cores Azuis e Cards)
+# 1. ESTILO CSS CUSTOMIZADO
 # ---------------------------------------------------------
 st.markdown(
     """
     <style>
-/* Estilização da Barra Lateral */
-    [data-testid="stSidebar"] {
-        background-color: #0b3d91 !important;
-    }
-
-    /* Força TODOS os textos da barra lateral a ficarem em BRANCO visível */
-    [data-testid="stSidebar"] *, 
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] div {
-        color: #ffffff !important;
-    }
-
-    /* Botão de Logout destacado com fundo vermelho/escuro e texto visível */
-    div[data-testid="stSidebar"] div.stButton > button {
-        background-color: #051937 !important;
-        color: #ffffff !important;
-        border: 1px solid #004d7a !important;
-        border-radius: 8px !important;
-        font-weight: bold !important;
-    }
-    div[data-testid="stSidebar"] div.stButton > button * {
-        color: #ffffff !important;
-    }
-    div[data-testid="stSidebar"] div.stButton > button:hover {
-        background-color: #004d7a !important;
-        color: #ffffff !important;
-    }
+    /* Ocultar completamente a barra lateral e o botão de expandir */
+    [data-testid="stSidebar"] { display: none !important; }
+    [data-testid="collapsedControl"] { display: none !important; }
 
     /* Estilização dos Cards e Hero */
     .hero {
@@ -195,103 +169,7 @@ ACTIVE_PROJECTS = [
         "ubs": "UBS Centro Integrado",
         "squad": "3 pessoas",
     },
-    {
-        "title": "Cuidar+",
-        "phase": "Validação",
-        "progress": 82,
-        "ubs": "UBS Nova Esperança",
-        "squad": "5 pessoas",
-    },
 ]
-
-TALENTS = [
-    {
-        "name": "Dr. Lucas Mendes",
-        "role": "Médico de Família",
-        "skills": ["Triagem", "Protocolos", "Mentoria"],
-        "unit": "UBS Centro Integrado",
-        "match": 94,
-    },
-    {
-        "name": "Marina Costa",
-        "role": "Designer de Serviço",
-        "skills": ["UX em Saúde", "Prototipação", "Facilitação"],
-        "unit": "Núcleo de Inovação SES",
-        "match": 91,
-    },
-    {
-        "name": "Paulo Henrique",
-        "role": "Analista de Dados SUS",
-        "skills": ["Indicadores", "Python", "Gestão"],
-        "unit": "SMS Recife",
-        "match": 88,
-    },
-    {
-        "name": "Dra. Camila Rocha",
-        "role": "Enfermeira Obstetra",
-        "skills": ["Atenção Materna", "Acolhimento", "Validação"],
-        "unit": "UBS Nova Esperança",
-        "match": 86,
-    },
-]
-
-OPEN_VACANCIES = [
-    {"team": "Fluxo Vivo", "role": "Facilitador clínico", "need": "Empatia + protocolos de Manchester"},
-    {"team": "Plantão Conectado", "role": "Dev front-end", "need": "Protótipo web de handover"},
-    {"team": "Cuidar+", "role": "Agente comunitário", "need": "Validação em território"},
-]
-
-TRAIL_PHASES = [
-    {
-        "name": "Empatia",
-        "number": 1,
-        "status": "Concluída",
-        "desc": "Imersão na unidade, escuta da equipe e mapeamento da jornada do paciente.",
-    },
-    {
-        "name": "Ideação",
-        "number": 2,
-        "status": "Concluída",
-        "desc": "Geração de ideias com o squad e priorização das apostas de maior impacto.",
-    },
-    {
-        "name": "Prototipação",
-        "number": 3,
-        "status": "Em andamento",
-        "desc": "Construção do Canvas Clínico e teste rápido de fluxos na UBS.",
-    },
-    {
-        "name": "Validação",
-        "number": 4,
-        "status": "Próxima",
-        "desc": "Piloto assistido, indicadores de impacto e decisão de escala.",
-    },
-]
-
-SOLUTIONS = [
-    {
-        "title": "Pulseira de Prioridade Visual",
-        "ubs": "UBS Jardim das Acácias",
-        "summary": "Sistema de pulseiras coloridas + painel de espera que reduz o tempo até a classificação de risco e deixa o fluxo transparente para o usuário.",
-        "impact": "−38% no tempo de espera da triagem",
-        "video": "https://www.w3schools.com/html/mov_bbb.mp4",
-    },
-    {
-        "title": "Handover 360",
-        "ubs": "UBS Centro Integrado",
-        "summary": "Checklist digital de passagem de plantão com alertas de condutas críticas e histórico de 24h da unidade.",
-        "impact": "−62% de falhas de comunicação entre turnos",
-        "video": "https://www.w3schools.com/html/movie.mp4",
-    },
-    {
-        "title": "Gestante Presente",
-        "ubs": "UBS Nova Esperança",
-        "summary": "Roteiro de reengajamento para faltosas de alto risco, com ACS, WhatsApp institucional e agenda protegida.",
-        "impact": "+27% de adesão ao pré-natal de alto risco",
-        "video": "https://www.w3schools.com/html/mov_bbb.mp4",
-    },
-]
-
 
 def inject_styles() -> None:
     st.markdown(
@@ -317,145 +195,10 @@ def inject_styles() -> None:
                 background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 38%, #eaf2ff 100%);
             }
 
-            [data-testid="stSidebar"] {
-                background: linear-gradient(180deg, #0b3d91 0%, #1457c7 58%, #1e88e5 100%);
-            }
-
-            [data-testid="stSidebar"] p,
-            [data-testid="stSidebar"] h3,
-            [data-testid="stSidebar"] span,
-            [data-testid="stSidebar"] label,
-            [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
-                color: #ffffff !important;
-            }
-
-            [data-testid="stSidebar"] .stButton > button {
-                background: rgba(255, 255, 255, 0.12) !important;
-                color: #ffffff !important;
-                border: 1px solid rgba(255, 255, 255, 0.18) !important;
-                text-align: left;
-                justify-content: flex-start;
-            }
-
-            [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-                background: #ffffff !important;
-                color: #0b3d91 !important;
-            }
-
-            [data-testid="stSidebar"] .stButton > button[kind="primary"] p,
-            [data-testid="stSidebar"] .stButton > button[kind="primary"] span {
-                color: #0b3d91 !important;
-            }
-
-            [data-testid="stHeader"] {
-                background: transparent;
-            }
-
-            .hero {
-                background: linear-gradient(135deg, #0b3d91 0%, #1565c0 52%, #42a5f5 100%);
-                color: #fff;
-                padding: 1.6rem 1.8rem;
-                border-radius: 22px;
-                margin-bottom: 1.2rem;
-                box-shadow: 0 16px 40px rgba(11, 61, 145, 0.22);
-            }
-
-            .hero h1 {
-                margin: 0 0 0.35rem 0;
-                font-size: 1.85rem;
-                letter-spacing: -0.03em;
-            }
-
-            .hero p {
-                margin: 0;
-                opacity: 0.92;
-            }
-
-            .brand-mark {
-                font-size: 0.78rem;
-                letter-spacing: 0.16em;
-                text-transform: uppercase;
-                font-weight: 700;
-                margin-bottom: 0.35rem;
-            }
-
-            .card {
-                background: var(--card);
-                border: 1px solid #d7e6fb;
-                border-radius: 18px;
-                padding: 1.15rem 1.2rem;
-                box-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
-                height: 100%;
-            }
-
-            .tag {
-                display: inline-block;
-                background: #e3f0ff;
-                color: #0b3d91;
-                border-radius: 999px;
-                padding: 0.18rem 0.7rem;
-                font-size: 0.75rem;
-                font-weight: 700;
-                margin-right: 0.35rem;
-                margin-bottom: 0.25rem;
-            }
-
-            .tag-alert {
-                background: #ffe8e8;
-                color: #b42318;
-            }
-
-            .muted {
-                color: var(--muted);
-                font-size: 0.9rem;
-            }
-
-            .progress-wrap {
-                display: flex;
-                gap: 0.6rem;
-                margin: 1rem 0 1.4rem 0;
-            }
-
-            .phase {
-                flex: 1;
-                background: #fff;
-                border: 2px solid #c9ddf8;
-                border-radius: 16px;
-                padding: 0.9rem;
-                text-align: center;
-            }
-
-            .phase.done {
-                background: #0b3d91;
-                color: #fff;
-                border-color: #0b3d91;
-            }
-
-            .phase.current {
-                background: #e8f3ff;
-                border-color: #1565c0;
-            }
-
-            .phase .num {
-                font-weight: 800;
-                font-size: 1.2rem;
-            }
-
-            .vacancy {
-                background: #f7fbff;
-                border-left: 4px solid #1565c0;
-                padding: 0.85rem 1rem;
-                border-radius: 12px;
-                margin-bottom: 0.7rem;
-            }
-
-            div[data-testid="stMetric"] {
-                background: #fff;
-                border: 1px solid #d7e6fb;
-                border-radius: 18px;
-                padding: 0.9rem 1rem;
-                box-shadow: 0 8px 24px rgba(21, 101, 192, 0.08);
-            }
+            /* Mantém a barra lateral oculta */
+            [data-testid="stSidebar"] { display: none !important; }
+            [data-testid="collapsedControl"] { display: none !important; }
+            [data-testid="stHeader"] { background: transparent; }
 
             .stButton > button {
                 border-radius: 12px;
@@ -466,6 +209,7 @@ def inject_styles() -> None:
             .stButton > button[kind="primary"] {
                 background: linear-gradient(90deg, #0b3d91, #1e88e5);
                 border: 0;
+                color: white !important;
             }
         </style>
         """,
@@ -475,13 +219,11 @@ def inject_styles() -> None:
 
 def init_state() -> None:
     defaults = {
-        "page": "Página Principal",
+        "nav_page": "Página Principal",
         "accepted": [],
-        "invites": [],
         "ratings": {},
-        "pilots": [],
-        "mentoria": False,
-        "canvas": False,
+        "current_challenge": None, # Guarda o desafio atual aceito
+        "proposed_solutions": []   # Guarda as soluções cadastradas via formulário
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -489,11 +231,14 @@ def init_state() -> None:
 
 
 def page_dashboard() -> None:
+    profile = st.session_state.get("profile", {})
+    user_name = profile.get("name", USER_NAME)
+
     st.markdown(
         f"""
         <div class="hero">
             <div class="brand-mark">InovaSUS Connect</div>
-            <h1>Olá, {USER_NAME}</h1>
+            <h1>Olá, {user_name}</h1>
             <p>Sua rede de inovação na Atenção Primária está ativa. Continue transformando a saúde!</p>
         </div>
         """,
@@ -508,23 +253,24 @@ def page_dashboard() -> None:
     m4.metric("Impacto estimado", "2.4k usuários", "+18%")
 
     st.subheader("Ações rápidas")
-    a1, a2, a3, a4 = st.columns(4)
+    # Colunas ajustadas para 3, removendo o "Montar squad"
+    a1, a2, a3 = st.columns(3)
     if a1.button("Novo desafio", key="btn_dash_novo", use_container_width=True, type="primary"):
         st.session_state["go_mural"] = True
         st.rerun()
-    if a2.button("Montar squad", key="btn_dash_squad", use_container_width=True):
-        st.toast("Use o Radar de Talentos para convidar colegas.")
-    if a3.button("Abrir trilha", key="btn_dash_trilha", use_container_width=True):
-        st.toast("A trilha está na fase de Prototipação.")
-    if a4.button("Ver vitrine", key="btn_dash_vitrine", use_container_width=True):
-        st.toast("Confira soluções prontas para piloto.")
+    if a2.button("Abrir trilha / Desafio Atual", key="btn_dash_trilha", use_container_width=True):
+        st.session_state.nav_page = "Desafio em Andamento"
+        st.rerun()
+    if a3.button("Ver vitrine", key="btn_dash_vitrine", use_container_width=True):
+        st.session_state.nav_page = "Vitrine de Soluções"
+        st.rerun()
 
     st.subheader("Projetos ativos")
     cols = st.columns(3)
     for i, project in enumerate(ACTIVE_PROJECTS):
         col_idx = i % 3
-        title = project.get("title") or project.get("titulo") or "Projeto sem título"
-        phase = project.get("phase") or project.get("fase") or "Em andamento"
+        title = project.get("title") or "Projeto sem título"
+        phase = project.get("phase") or "Em andamento"
         ubs = project.get("ubs") or "Unidade de Saúde"
         squad = project.get("squad") or "Equipe"
         progress = project.get("progress", 0)
@@ -535,7 +281,7 @@ def page_dashboard() -> None:
                 <div class="card">
                     <span class="tag">{phase}</span>
                     <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{title}</h4>
-                    <p class="muted">{ubs} · {squad}</p>
+                    <p style="color:#5b7394;font-size:0.9rem;">{ubs} · {squad}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -544,25 +290,6 @@ def page_dashboard() -> None:
 
 
 def page_challenges() -> None:
-    import base64
-
-    try:
-        with open("assets/hero_health.jpg", "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode()
-
-        _, col_center, _ = st.columns([1, 2, 1])
-        with col_center:
-            st.markdown(
-                f"""
-                <div style="background-color: #ffffff; padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 0 auto; max-width: 320px;">
-                    <img src="data:image/jpeg;base64,{encoded_string}" style="max-width: 280px; width: 100%; height: auto; border-radius: 8px;">
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-    except Exception:
-        pass
-
     st.markdown(
         """
         <div class="hero">
@@ -678,7 +405,7 @@ def page_challenges() -> None:
                     <div class="card">
                         {tags}{alert}
                         <h4 style="color:#0b3d91;margin:0.6rem 0 0.2rem 0;">{item_title}</h4>
-                        <p class="muted">{item_ubs} · {item_city}</p>
+                        <p style="color:#5b7394;font-size:0.9rem;">{item_ubs} · {item_city}</p>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -691,197 +418,92 @@ def page_challenges() -> None:
                     if "accepted" not in st.session_state:
                         st.session_state.accepted = []
                     if item_id not in st.session_state.accepted:
-                        st.session_state.accepted = [*st.session_state.accepted, item_id]
-                    st.success(f"Você aceitou o desafio de {item_ubs}.")
+                        st.session_state.accepted.append(item_id)
+                    
+                    # Salva o desafio atual na sessão e redireciona direto
+                    st.session_state.current_challenge = item
+                    st.session_state.nav_page = "Desafio em Andamento"
+                    st.rerun()
 
 
-def page_talents() -> None:
+# ---------------------------------------------------------
+# NOVA PÁGINA: DESAFIO EM ANDAMENTO
+# ---------------------------------------------------------
+def page_active_challenge() -> None:
     st.markdown(
         """
         <div class="hero">
-            <div class="brand-mark">Radar de Talentos</div>
-            <h1>Conecte quem resolve</h1>
-            <p>Busque habilidades, convide para o squad e acompanhe vagas abertas nas equipes.</p>
+            <div class="brand-mark">Desafio em Andamento</div>
+            <h1>Seu Projeto Atual</h1>
+            <p>Acompanhe o desafio selecionado, detalhe sua proposta e envie a solução final.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    skill_options = sorted({skill for person in TALENTS for skill in person["skills"]})
-    selected_skills = st.multiselect("Buscar por habilidades", skill_options)
-    name_query = st.text_input("Buscar por nome ou unidade")
+    challenge = st.session_state.get("current_challenge")
+    
+    if not challenge:
+        st.info("⚠️ Você ainda não aceitou nenhum desafio. Vá ao Mural de Desafios para começar.")
+        if st.button("Ir para o Mural de Desafios", type="primary"):
+            st.session_state.nav_page = "Mural de Desafios"
+            st.rerun()
+        return
 
-    suggested = []
-    q = name_query.strip().lower()
-    for person in TALENTS:
-        haystack = f"{person['name']} {person['role']} {person['unit']}".lower()
-        if q and q not in haystack:
-            continue
-        if selected_skills and not set(selected_skills).intersection(person["skills"]):
-            continue
-        suggested.append(person)
+    # Exibe informações do desafio aceito
+    st.markdown(f"### Desafio: {challenge.get('title', 'Sem Título')}")
+    st.markdown(f"**📍 Unidade:** {challenge.get('ubs', 'Não informada')} · {challenge.get('city', '')}")
+    st.markdown(f"**🔴 Dor Mapeada:** {challenge.get('pain', 'Sem detalhamento.')}")
+    st.markdown("---")
+    
+    # Formulário para envio da solução
+    st.subheader("💡 Cadastrar Solução Proposta")
+    st.write("Tem uma ideia para resolver este problema? Detalhe a sua solução e anexe o projeto da sua equipe.")
+    
+    with st.form("solution_proposal_form", clear_on_submit=True):
+        sol_title = st.text_input("Nome da Solução*", placeholder="Dê um nome criativo e claro para a sua solução")
+        sol_desc = st.text_area("Detalhamento da Solução*", placeholder="Como a sua solução resolve o problema apontado na dor mapeada?", height=120)
+        
+        # Campo para upload de arquivo
+        sol_file = st.file_uploader("Anexar Arquivo do Projeto (Apresentação, PDF, Zip, etc)")
+        
+        submit_btn = st.form_submit_button("Enviar Solução para a Vitrine", type="primary")
+        
+        if submit_btn:
+            if not sol_title or not sol_desc:
+                st.error("Preencha o nome e o detalhamento da solução antes de enviar.")
+            else:
+                file_data = None
+                file_name = None
+                if sol_file is not None:
+                    file_data = sol_file.getvalue()
+                    file_name = sol_file.name
 
-    st.subheader("Perfis sugeridos")
-    cols = st.columns(2)
-    for i, person in enumerate(suggested):
-        with cols[i % 2]:
-            tags = "".join(f'<span class="tag">{skill}</span>' for skill in person["skills"])
-            invited = person["name"] in st.session_state.get("invites", [])
-            st.markdown(
-                f"""
-                <div class="card">
-                    <p class="muted" style="margin:0;">Match {person['match']}%</p>
-                    <h4 style="color:#0b3d91;margin:0.2rem 0;">{person['name']}</h4>
-                    <p class="muted">{person['role']} · {person['unit']}</p>
-                    {tags}
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            label = "Convite enviado" if invited else "Convidar para o Squad"
-            if st.button(label, key=f"invite_{i}", use_container_width=True, type="primary"):
-                if "invites" not in st.session_state:
-                    st.session_state.invites = []
-                if person["name"] not in st.session_state.invites:
-                    st.session_state.invites = [*st.session_state.invites, person["name"]]
-                st.success(f"Convite enviado para {person['name']}.")
-
-    if not suggested:
-        st.info("Nenhum perfil encontrado. Amplie as habilidades da busca.")
-
-    st.subheader("Vagas em Equipes")
-    for vacancy in OPEN_VACANCIES:
-        st.markdown(
-            f"""
-            <div class="vacancy">
-                <strong>{vacancy['team']}</strong> · {vacancy['role']}<br>
-                <span class="muted">{vacancy['need']}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-
-def page_workspace() -> None:
-    st.markdown(
-        """
-        <div class="hero">
-            <div class="brand-mark">Workspace da Trilha</div>
-            <h1>Fluxo Vivo — Triagem Inteligente</h1>
-            <p>Trilha de inovação em 4 fases, do olhar da ponta até a validação clínica.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    phase_html = '<div class="progress-wrap">'
-    for phase in TRAIL_PHASES:
-        css = "phase"
-        if phase["status"] == "Concluída":
-            css += " done"
-        elif phase["status"] == "Em andamento":
-            css += " current"
-        phase_html += (
-            f'<div class="{css}">'
-            f'<div class="num">{phase["number"]}</div>'
-            f'<div>{phase["name"]}</div>'
-            f'<small>{phase["status"]}</small>'
-            "</div>"
-        )
-    phase_html += "</div>"
-    st.markdown(phase_html, unsafe_allow_html=True)
-    st.progress(0.68, text="68% da trilha concluída")
-
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("Abrir Canvas Clínico", use_container_width=True, type="primary"):
-            st.session_state.canvas = True
-        if st.session_state.get("canvas"):
-            st.markdown(
-                """
-                <div class="card">
-                    <h4 style="color:#0b3d91;margin-top:0;">Canvas Clínico</h4>
-                    <p><strong>Usuário:</strong> paciente da triagem matutina</p>
-                    <p><strong>Dor:</strong> espera longa e opaca</p>
-                    <p><strong>Aposta:</strong> sinalização visual + protocolo de priorização</p>
-                    <p><strong>Prova:</strong> tempo até classificação e NPS da recepção</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-    with c2:
-        if st.button("Agendar Mentoria", use_container_width=True):
-            st.session_state.mentoria = True
-        if st.session_state.get("mentoria"):
-            date = st.date_input("Data da mentoria")
-            slot = st.selectbox("Horário", ["09:00", "11:00", "14:00", "16:30"])
-            if st.button("Confirmar mentoria", type="primary"):
-                st.success(f"Mentoria confirmada em {date.strftime('%d/%m/%Y')} às {slot}.")
-
-    st.subheader("Fases da trilha")
-    for phase in TRAIL_PHASES:
-        with st.expander(f"{phase['number']}. {phase['name']} — {phase['status']}"):
-            st.write(phase["desc"])
-
-
-def page_showcase() -> None:
-    st.markdown(
-        """
-        <div class="hero">
-            <div class="brand-mark">Vitrine de Soluções</div>
-            <h1>O que já funciona na rede</h1>
-            <p>Assista ao pitch, avalie a solução e solicite um piloto para a sua unidade.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    for i, solution in enumerate(SOLUTIONS):
-        with st.container():
-            col_video, col_info = st.columns([1.1, 1])
-            with col_video:
-                st.video(solution["video"])
-            with col_info:
-                st.markdown(
-                    f"""
-                    <div class="card">
-                        <span class="tag">Solução validada</span>
-                        <h3 style="color:#0b3d91;margin:0.4rem 0;">{solution['title']}</h3>
-                        <p class="muted">{solution['ubs']}</p>
-                        <p>{solution['summary']}</p>
-                        <p><strong>Impacto:</strong> {solution['impact']}</p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                rating = st.slider(
-                    "Avaliação por estrelas",
-                    min_value=1,
-                    max_value=5,
-                    value=st.session_state.get("ratings", {}).get(solution["title"], 4),
-                    key=f"rate_{i}",
-                    help="1 estrela = pouco útil · 5 estrelas = pronta para escala",
-                )
-                if "ratings" not in st.session_state:
-                    st.session_state.ratings = {}
-                st.session_state.ratings[solution["title"]] = rating
-                st.caption("★" * rating + "☆" * (5 - rating))
-                requested = solution["title"] in st.session_state.get("pilots", [])
-                label = "Piloto solicitado" if requested else "Solicitar Piloto"
-                if st.button(label, key=f"pilot_{i}", type="primary"):
-                    if "pilots" not in st.session_state:
-                        st.session_state.pilots = []
-                    if solution["title"] not in st.session_state.pilots:
-                        st.session_state.pilots = [*st.session_state.pilots, solution["title"]]
-                    st.success(f"Solicitação de piloto enviada para {solution['title']}.")
-            st.divider()
+                author_name = st.session_state.get("profile", {}).get("name", "Equipe InovaSUS")
+                
+                # Monta a estrutura da solução para a vitrine
+                new_solution = {
+                    "title": sol_title,
+                    "category": challenge.get("area", ["Solução Inovadora"])[0] if challenge.get("area") else "Inovação",
+                    "author": author_name,
+                    "challenge_title": challenge.get('title', ''),
+                    "desc": sol_desc,
+                    "impact": "Projeto Submetido (Em avaliação)",
+                    "status": "Em Avaliação",
+                    "file_data": file_data,
+                    "file_name": file_name
+                }
+                
+                st.session_state.proposed_solutions.append(new_solution)
+                st.success("✅ Solução cadastrada com sucesso! Ela já está disponível na Vitrine.")
 
 
 def page_solutions() -> None:
     st.markdown("## 💡 Vitrine de Soluções")
     st.markdown("Explore as soluções e inovações aplicadas para transformar os serviços de saúde.")
 
-    solutions = [
+    # Base de soluções hardcoded existentes
+    base_solutions = [
         {
             "title": "Triagem Digital SUS",
             "category": "Atendimento & Triagem",
@@ -900,15 +522,23 @@ def page_solutions() -> None:
         }
     ]
 
-    categories = ["Todas"] + list(set(s["category"] for s in solutions))
+    # Combina com as soluções recém propostas pelo usuário em sessão
+    user_proposed = st.session_state.get("proposed_solutions", [])
+    all_solutions = base_solutions + user_proposed
+
+    categories = ["Todas"] + list(set(s["category"] for s in all_solutions))
     selected_cat = st.selectbox("Filtrar por Categoria:", categories)
 
     if selected_cat != "Todas":
-        filtered_solutions = [s for s in solutions if s["category"] == selected_cat]
+        filtered_solutions = [s for s in all_solutions if s["category"] == selected_cat]
     else:
-        filtered_solutions = solutions
+        filtered_solutions = all_solutions
 
     st.markdown("---")
+
+    if not filtered_solutions:
+        st.info("Nenhuma solução encontrada nesta categoria.")
+        return
 
     cols = st.columns(2)
     for index, sol in enumerate(filtered_solutions):
@@ -920,8 +550,8 @@ def page_solutions() -> None:
                     <div style="background-color: #ffffff; padding: 20px; border-radius: 12px; border-left: 5px solid #0d6efd; box-shadow: 0 4px 10px rgba(0,0,0,0.06); margin-bottom: 20px;">
                         <span style="background-color: #e7f1ff; color: #0d6efd; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px;">{sol['category']}</span>
                         <h3 style="margin-top: 10px; margin-bottom: 5px; color: #1e293b;">{sol['title']}</h3>
-                        <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">👤 <b>Responsável:</b> {sol['author']}</p>
-                        <p style="font-size: 14px; color: #334155;">{sol['desc']}</p>
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 5px;">👥 <b>Equipe/Responsável:</b> {sol['author']}</p>
+                        <p style="font-size: 14px; color: #334155; margin-bottom: 10px;">{sol['desc']}</p>
                         <div style="background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; margin-top: 10px;">
                             <span style="font-size: 13px; color: #16a34a; font-weight: bold;">📈 Impacto: {sol['impact']}</span>
                         </div>
@@ -931,8 +561,19 @@ def page_solutions() -> None:
                 )
                 with st.expander("🔍 Ver detalhes da solução"):
                     st.write(f"**Status atual:** {sol['status']}")
+                    if sol.get("challenge_title"):
+                        st.write(f"**Resolve o Desafio:** {sol['challenge_title']}")
+                    
                     st.button("Entrar em contato com o autor", key=f"btn_sol_{index}")
-
+                    
+                    # Se o projeto possuir arquivo, gera o botão de Download via Streamlit nativo
+                    if sol.get("file_data") and sol.get("file_name"):
+                        st.download_button(
+                            label=f"⬇️ Baixar Arquivo ({sol['file_name']})",
+                            data=sol["file_data"],
+                            file_name=sol["file_name"],
+                            key=f"download_file_{index}"
+                        )
 
 def render_ranking_page():
     st.header("🏆 Ranking de Soluções dos Alunos")
@@ -956,83 +597,127 @@ def render_ranking_page():
     except Exception:
         st.info("Ranking de soluções em processamento.")
 
-
-def render_votacao_gestor(solution_id, aluno_id):
-    user_role = st.session_state.get("profile", {}).get("role")
-    if user_role == "gestor":
-        st.subheader("★ Avaliar esta Solução")
-        nota = st.slider("Nota da solução (1 a 5)", 1, 5, 5, key=f"score_{solution_id}")
-        if st.button("Enviar Voto", key=f"btn_vote_{solution_id}"):
+# ---------------------------------------------------------
+# NOVA PÁGINA: EDITAR PERFIL
+# ---------------------------------------------------------
+def page_edit_profile():
+    st.markdown(
+        """
+        <div class="hero">
+            <div class="brand-mark">Configurações</div>
+            <h1>Editar Perfil</h1>
+            <p>Mantenha seus dados atualizados para facilitar o contato com outros profissionais.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    profile = st.session_state.get("profile", {})
+    
+    with st.form("form_edit_profile"):
+        st.subheader("Seus Dados")
+        new_name = st.text_input("Nome Completo", value=profile.get("name", ""))
+        new_ubs = st.text_input("Unidade / Secretaria de Saúde", value=profile.get("ubs", ""))
+        
+        submit = st.form_submit_button("Salvar Alterações", type="primary")
+        
+        if submit:
             try:
-                gestor_id = st.session_state.user.id
-                supabase.table("votes").upsert({
-                    "gestor_id": gestor_id,
-                    "solution_id": solution_id,
-                    "aluno_id": aluno_id,
-                    "score": nota,
-                }).execute()
-                st.success("Voto registrado com sucesso!")
-                st.rerun()
+                user_id = st.session_state.user.id
+                supabase.table("profiles").update({
+                    "name": new_name,
+                    "ubs": new_ubs
+                }).eq("id", user_id).execute()
+                
+                st.session_state.profile["name"] = new_name
+                st.session_state.profile["ubs"] = new_ubs
+                st.success("Perfil atualizado com sucesso!")
             except Exception as e:
-                st.error(f"Erro ao salvar voto: {e}")
-
+                st.error(f"Erro ao atualizar perfil: {e}")
+                
+    st.write("")
+    if st.button("⬅ Voltar para o Início"):
+        st.session_state.nav_page = "Página Principal"
+        st.rerun()
 
 # ==========================================
 # FUNÇÃO PRINCIPAL (MAIN) E NAVEGAÇÃO
 # ==========================================
 
 def main():
+    inject_styles()
     init_state()
 
-    # Se não estiver logado, exibe apenas a tela de login/cadastro
+    # Se não estiver logado, exibe a tela de login
     if "user" not in st.session_state or st.session_state.user is None:
-        st.markdown("""
-            <style>
-                [data-testid="stSidebar"] { display: none !important; }
-            </style>
-        """, unsafe_allow_html=True)
         render_auth_page()
         return
 
-    # USUÁRIO LOGADO: Renderiza a barra lateral
     profile = st.session_state.get("profile", {})
     user_name = profile.get("name", "Usuário")
-    user_role = "Gestor" if profile.get("role") == "gestor" else "Profissional de Saúde"
-    user_ubs = profile.get("ubs", "N/A")
 
-    st.sidebar.markdown("### 🏥 InovaSUS Connect")
-    st.sidebar.markdown(f"**Bem-vindo(a), {user_name}!**")
-    st.sidebar.caption(f"📌 {user_role} · {user_ubs}")
-    st.sidebar.markdown("---")
+    # ---------------------------------------------------------
+    # CABEÇALHO SUPERIOR (Navegação + Perfil)
+    # ---------------------------------------------------------
+    pages_list = [
+        "Página Principal", 
+        "Mural de Desafios", 
+        "Desafio em Andamento", 
+        "Vitrine de Soluções", 
+        "🏆 Ranking"
+    ]
 
-    pages = {
-        "Página Principal": page_dashboard,
-        "Mural de Desafios": page_challenges,
-        "Workspace da Trilha": page_workspace,
-        "Vitrine de Soluções": page_solutions,
-        "🏆 Ranking": render_ranking_page,
-    }
+    col_nav, col_profile = st.columns([5, 1])
+    
+    with col_profile:
+        # Menu de perfil
+        with st.popover(f"👤 {user_name}"):
+            if st.button("✏️ Editar Perfil", use_container_width=True):
+                st.session_state.nav_page = "Editar Perfil"
+                st.rerun()
+            if st.button("🚪 Sair", use_container_width=True):
+                logout()
 
-    # Redirecionamento seguro acionado pelo botão "Novo desafio"
-    if st.session_state.get("go_mural"):
-        st.session_state["go_mural"] = False
-        st.session_state["nav_radio_choice"] = "Mural de Desafios"
+    with col_nav:
+        # Redirecionamento do botão "Novo desafio" da dashboard
+        if st.session_state.get("go_mural"):
+            st.session_state.nav_page = "Mural de Desafios"
+            st.session_state.go_mural = False
+            
+        current_nav = st.session_state.get("nav_page", "Página Principal")
 
-    if "nav_radio_choice" not in st.session_state:
-        st.session_state["nav_radio_choice"] = "Página Principal"
+        if current_nav != "Editar Perfil":
+            idx = pages_list.index(current_nav) if current_nav in pages_list else 0
+            
+            selected_page = st.radio(
+                "Navegação Principal", 
+                pages_list, 
+                index=idx, 
+                horizontal=True, 
+                label_visibility="collapsed"
+            )
+            
+            st.session_state.nav_page = selected_page
+        else:
+            selected_page = "Editar Perfil"
 
-    page_selected = st.sidebar.radio(
-        "Navegação", 
-        list(pages.keys()), 
-        key="nav_radio_choice"
-    )
+    st.markdown("---")
 
-    if page_selected in pages:
-        pages[page_selected]()
-
-    st.sidebar.markdown("---")
-    if st.sidebar.button("🚪 Sair (Logout)", key="btn_logout_sidebar_final", use_container_width=True):
-        logout()
+    # ---------------------------------------------------------
+    # ROTEAMENTO DE PÁGINAS
+    # ---------------------------------------------------------
+    if selected_page == "Página Principal":
+        page_dashboard()
+    elif selected_page == "Mural de Desafios":
+        page_challenges()
+    elif selected_page == "Desafio em Andamento":
+        page_active_challenge()
+    elif selected_page == "Vitrine de Soluções":
+        page_solutions()
+    elif selected_page == "🏆 Ranking":
+        render_ranking_page()
+    elif selected_page == "Editar Perfil":
+        page_edit_profile()
 
 
 if __name__ == "__main__":
