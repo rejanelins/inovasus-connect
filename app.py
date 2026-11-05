@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 1. ESTILO CSS CUSTOMIZADO
+# 1. ESTILO CSS CUSTOMIZADO (Tema Teal/Mint Escuro)
 # ---------------------------------------------------------
 st.markdown(
     """
@@ -20,35 +20,39 @@ st.markdown(
 
     /* Estilização dos Cards e Hero */
     .hero {
-        background: linear-gradient(135deg, #0b3d91 0%, #1e5bb8 100%);
-        padding: 2rem;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #0e4146 0%, #166461 100%);
+        padding: 2.5rem 2rem;
+        border-radius: 16px;
         color: white;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(14, 65, 70, 0.2);
     }
     .brand-mark {
         font-weight: bold;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         font-size: 0.85rem;
-        opacity: 0.9;
+        color: #7be7c3;
+        margin-bottom: 0.5rem;
     }
     .card {
-        background-color: #f8f9fa;
+        background-color: #ffffff;
         border: 1px solid #e9ecef;
-        border-radius: 8px;
+        border-radius: 12px;
         padding: 1.25rem;
         margin-bottom: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
     .tag {
         display: inline-block;
-        background-color: #e3f2fd;
-        color: #0b3d91;
+        background-color: #d9f6eb;
+        color: #0e4146;
         padding: 0.2rem 0.6rem;
-        border-radius: 4px;
+        border-radius: 6px;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
         margin-right: 0.4rem;
+        margin-bottom: 0.5rem;
     }
     .tag-alert {
         background-color: #ffebee;
@@ -84,7 +88,16 @@ def get_challenges():
 # FUNÇÕES DE AUTENTICAÇÃO E LOGIN
 # ---------------------------------------------------------
 def render_auth_page(key_prefix: str = "main"):
-    st.markdown("## 🩺 InovaSUS Connect - Acesso")
+    # Cabeçalho de Login padronizado com o novo tema
+    st.markdown(
+        """
+        <div class="hero" style="text-align: center; padding: 2.5rem 1rem;">
+            <div class="brand-mark">InovaSUS Connect</div>
+            <h1 style="margin: 0; font-size: 2rem;">Conectando conhecimento, transformando o SUS</h1>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     
     tab_login, tab_signup = st.tabs(["Entrar", "Criar Conta"])
     
@@ -178,12 +191,12 @@ def inject_styles() -> None:
             @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
             :root {
-                --navy: #0b3d91;
-                --blue: #1565c0;
-                --sky: #1e88e5;
-                --ice: #eef5ff;
+                --primary: #0e4146;
+                --primary-light: #166461;
+                --accent: #7be7c3;
+                --accent-text: #092c2f;
+                --bg: #f4f8f7;
                 --card: #ffffff;
-                --ink: #123056;
                 --muted: #5b7394;
             }
 
@@ -192,24 +205,21 @@ def inject_styles() -> None:
             }
 
             .stApp {
-                background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 38%, #eaf2ff 100%);
+                background: linear-gradient(180deg, #f0f7f6 0%, #ffffff 40%, #eef5f4 100%);
             }
 
-            /* Mantém a barra lateral oculta */
-            [data-testid="stSidebar"] { display: none !important; }
-            [data-testid="collapsedControl"] { display: none !important; }
             [data-testid="stHeader"] { background: transparent; }
 
-            .stButton > button {
-                border-radius: 12px;
-                font-weight: 700;
-                border: 1px solid #1565c0;
-            }
-
+            /* Sobrescreve os botões "Primary" com a cor Menta/Teal do layout */
             .stButton > button[kind="primary"] {
-                background: linear-gradient(90deg, #0b3d91, #1e88e5);
-                border: 0;
-                color: white !important;
+                background: var(--accent) !important;
+                border: 0 !important;
+                color: var(--accent-text) !important;
+                font-weight: 800 !important;
+                box-shadow: 0 4px 10px rgba(123, 231, 195, 0.3);
+            }
+            .stButton > button[kind="primary"]:hover {
+                background: #5cdbae !important;
             }
         </style>
         """,
@@ -222,8 +232,8 @@ def init_state() -> None:
         "nav_page": "Página Principal",
         "accepted": [],
         "ratings": {},
-        "current_challenge": None, # Guarda o desafio atual aceito
-        "proposed_solutions": []   # Guarda as soluções cadastradas via formulário
+        "current_challenge": None,
+        "proposed_solutions": []
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -234,13 +244,19 @@ def page_dashboard() -> None:
     profile = st.session_state.get("profile", {})
     user_name = profile.get("name", USER_NAME)
 
+    # NOVO CABEÇALHO (Com o texto exato da imagem)
     st.markdown(
         f"""
         <div class="hero">
-            <div class="brand-mark">InovaSUS Connect</div>
-            <h1>Olá, {user_name}</h1>
-            <p>Sua rede de inovação na Atenção Primária está ativa. Continue transformando a saúde!</p>
+            <div class="brand-mark">INOVAÇÃO • CONHECIMENTO • IMPACTO</div>
+            <h1 style="font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin: 1rem 0;">
+                Ideias que transformam.<br>Conexões que fazem<br>o SUS avançar.
+            </h1>
+            <p style="font-size: 1.15rem; line-height: 1.6; max-width: 650px; opacity: 0.95; margin-bottom: 0;">
+                Uma rede colaborativa que aproxima os desafios reais dos serviços públicos de saúde do conhecimento acadêmico e da inovação social.
+            </p>
         </div>
+        <p style="color: #0e4146; font-size: 1.1rem; font-weight: 600;">Bem-vindo(a) de volta, {user_name}!</p>
         """,
         unsafe_allow_html=True,
     )
@@ -253,7 +269,6 @@ def page_dashboard() -> None:
     m4.metric("Impacto estimado", "2.4k usuários", "+18%")
 
     st.subheader("Ações rápidas")
-    # Colunas ajustadas para 3, removendo o "Montar squad"
     a1, a2, a3 = st.columns(3)
     if a1.button("Novo desafio", key="btn_dash_novo", use_container_width=True, type="primary"):
         st.session_state["go_mural"] = True
@@ -280,7 +295,7 @@ def page_dashboard() -> None:
                 f"""
                 <div class="card">
                     <span class="tag">{phase}</span>
-                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0b3d91;">{title}</h4>
+                    <h4 style="margin:0.45rem 0 0.2rem 0;color:#0e4146;">{title}</h4>
                     <p style="color:#5b7394;font-size:0.9rem;">{ubs} · {squad}</p>
                 </div>
                 """,
@@ -404,7 +419,7 @@ def page_challenges() -> None:
                     f"""
                     <div class="card">
                         {tags}{alert}
-                        <h4 style="color:#0b3d91;margin:0.6rem 0 0.2rem 0;">{item_title}</h4>
+                        <h4 style="color:#0e4146;margin:0.6rem 0 0.2rem 0;">{item_title}</h4>
                         <p style="color:#5b7394;font-size:0.9rem;">{item_ubs} · {item_city}</p>
                     </div>
                     """,
@@ -420,14 +435,13 @@ def page_challenges() -> None:
                     if item_id not in st.session_state.accepted:
                         st.session_state.accepted.append(item_id)
                     
-                    # Salva o desafio atual na sessão e redireciona direto
                     st.session_state.current_challenge = item
                     st.session_state.nav_page = "Desafio em Andamento"
                     st.rerun()
 
 
 # ---------------------------------------------------------
-# NOVA PÁGINA: DESAFIO EM ANDAMENTO
+# PÁGINA: DESAFIO EM ANDAMENTO
 # ---------------------------------------------------------
 def page_active_challenge() -> None:
     st.markdown(
@@ -450,13 +464,11 @@ def page_active_challenge() -> None:
             st.rerun()
         return
 
-    # Exibe informações do desafio aceito
     st.markdown(f"### Desafio: {challenge.get('title', 'Sem Título')}")
     st.markdown(f"**📍 Unidade:** {challenge.get('ubs', 'Não informada')} · {challenge.get('city', '')}")
     st.markdown(f"**🔴 Dor Mapeada:** {challenge.get('pain', 'Sem detalhamento.')}")
     st.markdown("---")
     
-    # Formulário para envio da solução
     st.subheader("💡 Cadastrar Solução Proposta")
     st.write("Tem uma ideia para resolver este problema? Detalhe a sua solução e anexe o projeto da sua equipe.")
     
@@ -464,7 +476,6 @@ def page_active_challenge() -> None:
         sol_title = st.text_input("Nome da Solução*", placeholder="Dê um nome criativo e claro para a sua solução")
         sol_desc = st.text_area("Detalhamento da Solução*", placeholder="Como a sua solução resolve o problema apontado na dor mapeada?", height=120)
         
-        # Campo para upload de arquivo
         sol_file = st.file_uploader("Anexar Arquivo do Projeto (Apresentação, PDF, Zip, etc)")
         
         submit_btn = st.form_submit_button("Enviar Solução para a Vitrine", type="primary")
@@ -481,7 +492,6 @@ def page_active_challenge() -> None:
 
                 author_name = st.session_state.get("profile", {}).get("name", "Equipe InovaSUS")
                 
-                # Monta a estrutura da solução para a vitrine
                 new_solution = {
                     "title": sol_title,
                     "category": challenge.get("area", ["Solução Inovadora"])[0] if challenge.get("area") else "Inovação",
@@ -499,10 +509,20 @@ def page_active_challenge() -> None:
 
 
 def page_solutions() -> None:
-    st.markdown("## 💡 Vitrine de Soluções")
-    st.markdown("Explore as soluções e inovações aplicadas para transformar os serviços de saúde.")
+    # CABEÇALHO PADRONIZADO DA VITRINE
+    st.markdown(
+        """
+        <div class="hero">
+            <div class="brand-mark">Vitrine de Soluções</div>
+            <h1 style="margin: 0 0 0.5rem 0;">Vitrine de Soluções</h1>
+            <p style="margin: 0; font-size: 1.1rem; opacity: 0.95;">
+                Explore as soluções e inovações aplicadas para transformar os serviços de saúde.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-    # Base de soluções hardcoded existentes
     base_solutions = [
         {
             "title": "Triagem Digital SUS",
@@ -522,7 +542,6 @@ def page_solutions() -> None:
         }
     ]
 
-    # Combina com as soluções recém propostas pelo usuário em sessão
     user_proposed = st.session_state.get("proposed_solutions", [])
     all_solutions = base_solutions + user_proposed
 
@@ -547,9 +566,9 @@ def page_solutions() -> None:
             with st.container():
                 st.markdown(
                     f"""
-                    <div style="background-color: #ffffff; padding: 20px; border-radius: 12px; border-left: 5px solid #0d6efd; box-shadow: 0 4px 10px rgba(0,0,0,0.06); margin-bottom: 20px;">
-                        <span style="background-color: #e7f1ff; color: #0d6efd; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px;">{sol['category']}</span>
-                        <h3 style="margin-top: 10px; margin-bottom: 5px; color: #1e293b;">{sol['title']}</h3>
+                    <div style="background-color: #ffffff; padding: 20px; border-radius: 12px; border-left: 5px solid #166461; box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin-bottom: 20px;">
+                        <span style="background-color: #d9f6eb; color: #0e4146; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 6px;">{sol['category']}</span>
+                        <h3 style="margin-top: 10px; margin-bottom: 5px; color: #0e4146;">{sol['title']}</h3>
                         <p style="font-size: 13px; color: #64748b; margin-bottom: 5px;">👥 <b>Equipe/Responsável:</b> {sol['author']}</p>
                         <p style="font-size: 14px; color: #334155; margin-bottom: 10px;">{sol['desc']}</p>
                         <div style="background-color: #f8fafc; padding: 8px 12px; border-radius: 8px; margin-top: 10px;">
@@ -566,7 +585,6 @@ def page_solutions() -> None:
                     
                     st.button("Entrar em contato com o autor", key=f"btn_sol_{index}")
                     
-                    # Se o projeto possuir arquivo, gera o botão de Download via Streamlit nativo
                     if sol.get("file_data") and sol.get("file_name"):
                         st.download_button(
                             label=f"⬇️ Baixar Arquivo ({sol['file_name']})",
@@ -598,7 +616,7 @@ def render_ranking_page():
         st.info("Ranking de soluções em processamento.")
 
 # ---------------------------------------------------------
-# NOVA PÁGINA: EDITAR PERFIL
+# PÁGINA: EDITAR PERFIL
 # ---------------------------------------------------------
 def page_edit_profile():
     st.markdown(
@@ -670,7 +688,6 @@ def main():
     col_nav, col_profile = st.columns([5, 1])
     
     with col_profile:
-        # Menu de perfil
         with st.popover(f"👤 {user_name}"):
             if st.button("✏️ Editar Perfil", use_container_width=True):
                 st.session_state.nav_page = "Editar Perfil"
@@ -679,7 +696,6 @@ def main():
                 logout()
 
     with col_nav:
-        # Redirecionamento do botão "Novo desafio" da dashboard
         if st.session_state.get("go_mural"):
             st.session_state.nav_page = "Mural de Desafios"
             st.session_state.go_mural = False
